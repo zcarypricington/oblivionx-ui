@@ -202,6 +202,7 @@
     border-bottom:1px solid var(--border);
     -webkit-user-select:none;
     user-select:none;
+    cursor:default;
     /* Top crystal line */
     box-shadow:inset 0 1px 0 rgba(168,85,247,0.15);
   }
@@ -2386,10 +2387,14 @@
   function hasWebView2(){ return !!(window.chrome && window.chrome.webview); }
   function webviewPost(action, payload){
     if (!hasWebView2()){
-      log('err', 'No WebView2  detected.');
+      log('err', 'No WebView2 detected.');
       return false;
     }
-    window.chrome.webview.postMessage(JSON.stringify(Object.assign({ action }, payload || {})));
+
+    window.chrome.webview.postMessage(
+      Object.assign({ action }, payload || {})
+    );
+
     return true;
   }
   if (hasWebView2()){
