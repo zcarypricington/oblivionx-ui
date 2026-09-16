@@ -1719,7 +1719,42 @@
 
 .ai-control:focus { border-color: #6545a0; }
 .ai-model { width: 220px; }
-.ai-key { width: 205px; }
+
+.ai-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 11px;
+  border: 1px solid #30204f;
+  border-radius: 7px;
+  background: #100b1b;
+  font-size: 11px;
+  color: #cfc7e3;
+  flex-shrink: 0;
+}
+.ai-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3d3860;
+  flex-shrink: 0;
+  transition: background .3s ease, box-shadow .3s ease;
+}
+.ai-status-dot.connected {
+  background: #7ee787;
+  box-shadow: 0 0 6px rgba(126,231,135,0.55);
+  animation: aiStatusPulse 2s ease-in-out infinite;
+}
+.ai-status-dot.offline {
+  background: #ff7b72;
+  box-shadow: 0 0 6px rgba(255,123,114,0.45);
+}
+@keyframes aiStatusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.ai-status-label { white-space: nowrap; }
 
 .ai-btn {
   height: 34px;
@@ -1879,8 +1914,7 @@
 
 @media (max-width: 820px) {
   .ai-title-wrap { display: none; }
-  .ai-model { width: 180px; }
-  .ai-key { width: 150px; }
+  .ai-model { width: 160px; }
 }
 
 </style>
@@ -2038,17 +2072,22 @@
     <div class="ai-toolbar">
       <div class="ai-title-wrap">
         <div class="ai-title">OblivionX AI</div>
-        <div class="ai-subtitle">Powered by OpenRouter</div>
+        <div class="ai-subtitle" id="aiSubtitle">Connecting…</div>
       </div>
       <select class="ai-control ai-model" id="aiModel" aria-label="AI model">
-        <option value="openrouter/free">OpenRouter Free</option>
-        <option value="openai/gpt-5">OpenAI GPT-5</option>
-        <option value="openai/gpt-5-mini">OpenAI GPT-5 Mini</option>
-        <option value="anthropic/claude-sonnet-4">Claude Sonnet 4</option>
-        <option value="google/gemini-2.5-flash">Gemini 2.5 Flash</option>
+        <option value="free">Free Router</option>
+        <option value="gpt-5">GPT-5</option>
+        <option value="gpt-mini">GPT-5 Mini</option>
+        <option value="claude-sonnet">Claude Sonnet</option>
+        <option value="gemini-flash">Gemini Flash</option>
+        <option value="grok">Grok</option>
+        <option value="deepseek">DeepSeek</option>
+        <option value="qwen">Qwen</option>
       </select>
-      <input class="ai-control ai-key" id="aiApiKey" type="password" autocomplete="off" placeholder="OpenRouter API key">
-      <button class="ai-btn" id="aiSaveKey">Save key</button>
+      <div class="ai-status-pill" id="aiStatusPill">
+        <span class="ai-status-dot" id="aiStatusDot"></span>
+        <span class="ai-status-label" id="aiStatusLabel">Offline</span>
+      </div>
       <button class="ai-btn" id="aiClearChat">Clear</button>
     </div>
 
@@ -2059,7 +2098,7 @@
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H8l-4 2 1.5-4A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg>
           </div>
           <h2>Ask OblivionX AI</h2>
-          <p>Use OpenRouter to chat with supported AI models without leaving the executor. Enter your own OpenRouter API key above, then send a message.</p>
+          <p>Select a model above and send a message to start chatting. The AI backend handles routing and authentication.</p>
         </div>
       </div>
     </div>
@@ -2072,7 +2111,6 @@
         </button>
       </div>
       <div class="ai-status" id="aiStatus"></div>
-      <div class="ai-settings-note">Your API key is stored locally in this WebView's local storage. Never put a shared/private key directly into the application source.</div>
     </div>
   </div>
 
@@ -3325,7 +3363,7 @@
       loadHub(true);
     }
     if (name === 'ai') {
-      setTimeout(() => document.getElementById('aiInput')?.focus(), 50);
+      onAiTabOpen();
     }
   }
   navEditorBtn.addEventListener('click', () => showPage('editor'));
@@ -3809,44 +3847,61 @@
 
 
   // ============================================================
-  // OpenRouter AI Chat
+  // OblivionX AI Chat — backend-routed (no API key in frontend)
   // ============================================================
-  const AI_STORAGE_KEY = 'oblivionxAiSettings';
+  const AI_ROUTER_URL = 'https://obx-api.onrender.com';
   const AI_HISTORY_KEY = 'oblivionxAiHistory';
+  const AI_MODEL_KEY = 'oblivionxAiModel';
+
   const aiModel = document.getElementById('aiModel');
-  const aiApiKey = document.getElementById('aiApiKey');
-  const aiSaveKey = document.getElementById('aiSaveKey');
   const aiClearChat = document.getElementById('aiClearChat');
   const aiChat = document.getElementById('aiChat');
   const aiEmptyState = document.getElementById('aiEmptyState');
   const aiInput = document.getElementById('aiInput');
   const aiSend = document.getElementById('aiSend');
   const aiStatus = document.getElementById('aiStatus');
+  const aiSubtitle = document.getElementById('aiSubtitle');
+  const aiStatusDot = document.getElementById('aiStatusDot');
+  const aiStatusLabel = document.getElementById('aiStatusLabel');
+
   let aiMessages = [];
   let aiBusy = false;
+  let aiBackendOnline = false;
 
-  function loadAiSettings() {
+  // ---- Status helpers ----
+  function setAiStatus(text, error) {
+    aiStatus.textContent = text || '';
+    aiStatus.classList.toggle('error', !!error);
+  }
+
+  function setBackendStatus(online) {
+    aiBackendOnline = online;
+    aiStatusDot.className = 'ai-status-dot ' + (online ? 'connected' : 'offline');
+    aiStatusLabel.textContent = online ? 'Connected' : 'Offline';
+    aiSubtitle.textContent = online ? 'Connected to OBX Backend' : 'Backend Offline';
+  }
+
+  // ---- Health check ----
+  async function checkBackendHealth() {
     try {
-      const settings = JSON.parse(localStorage.getItem(AI_STORAGE_KEY) || '{}');
-      if (settings.model) aiModel.value = settings.model;
-      if (settings.key) aiApiKey.value = settings.key;
-    } catch (_) {}
+      const res = await fetch(AI_ROUTER_URL + '/health', { method: 'GET', signal: AbortSignal.timeout(8000) });
+      setBackendStatus(res.ok);
+    } catch (_) {
+      setBackendStatus(false);
+    }
   }
 
-  function saveAiSettings() {
-    try {
-      localStorage.setItem(AI_STORAGE_KEY, JSON.stringify({
-        model: aiModel.value,
-        key: aiApiKey.value.trim()
-      }));
-    } catch (_) {}
+  // Check once on load, then every 60 seconds (don't spam)
+  checkBackendHealth();
+  let healthInterval = setInterval(checkBackendHealth, 60000);
+
+  // Check when AI tab is opened
+  function onAiTabOpen() {
+    checkBackendHealth();
+    setTimeout(() => document.getElementById('aiInput')?.focus(), 50);
   }
 
-  function setAiStatus(text = '', error = false) {
-    aiStatus.textContent = text;
-    aiStatus.classList.toggle('error', error);
-  }
-
+  // ---- Text helpers ----
   function escapeAiHtml(text) {
     return String(text).replace(/[&<>"']/g, c => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -3859,6 +3914,7 @@
     return safe;
   }
 
+  // ---- Message rendering ----
   function renderAiMessage(role, content) {
     aiEmptyState.hidden = true;
     const row = document.createElement('div');
@@ -3886,10 +3942,13 @@
     for (const message of aiMessages) renderAiMessage(message.role, message.content);
   }
 
+  // ---- Persistence ----
   function loadAiHistory() {
     try {
       const saved = JSON.parse(sessionStorage.getItem(AI_HISTORY_KEY) || '[]');
-      if (Array.isArray(saved)) aiMessages = saved.filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+      if (Array.isArray(saved)) {
+        aiMessages = saved.filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+      }
     } catch (_) {
       aiMessages = [];
     }
@@ -3900,24 +3959,59 @@
     try { sessionStorage.setItem(AI_HISTORY_KEY, JSON.stringify(aiMessages.slice(-40))); } catch (_) {}
   }
 
+  function loadAiModel() {
+    try {
+      const saved = localStorage.getItem(AI_MODEL_KEY);
+      if (saved) {
+        const opt = aiModel.querySelector('option[value="' + saved + '"]');
+        if (opt) aiModel.value = saved;
+      }
+    } catch (_) {}
+  }
+
+  function saveAiModel() {
+    try { localStorage.setItem(AI_MODEL_KEY, aiModel.value); } catch (_) {}
+  }
+
+  // ---- Input auto-resize ----
   function autoResizeAiInput() {
     aiInput.style.height = 'auto';
     aiInput.style.height = Math.min(aiInput.scrollHeight, 150) + 'px';
   }
 
+  // ---- Error message mapping ----
+  function friendlyAiError(status, message) {
+    if (!navigator.onLine) return 'No internet connection.';
+    const map = {
+      400: 'Bad request — the message could not be processed.',
+      401: 'Backend authentication error. Contact support.',
+      403: 'Access denied by the backend.',
+      429: 'Rate limit reached. Wait a moment and try again.',
+      500: 'The AI backend encountered an error. Try again shortly.',
+      502: 'Backend is unreachable (502). It may be starting up — try again in a moment.',
+      503: 'Backend is unavailable (503). Try again shortly.',
+    };
+    if (status && map[status]) return map[status];
+    if (message) return 'Request failed: ' + message;
+    return 'Could not reach the AI backend. Check your connection.';
+  }
+
+  // ---- Send message ----
   async function sendAiMessage() {
     if (aiBusy) return;
-    const key = aiApiKey.value.trim();
     const prompt = aiInput.value.trim();
-
-    if (!key) {
-      setAiStatus('Enter your OpenRouter API key first.', true);
-      aiApiKey.focus();
-      return;
-    }
     if (!prompt) return;
 
-    saveAiSettings();
+    if (!aiBackendOnline) {
+      // Try health check before blocking
+      await checkBackendHealth();
+      if (!aiBackendOnline) {
+        setAiStatus('Backend is offline. Cannot send message.', true);
+        return;
+      }
+    }
+
+    saveAiModel();
     aiInput.value = '';
     autoResizeAiInput();
 
@@ -3934,14 +4028,9 @@
     let assistantText = '';
 
     try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      const response = await fetch(AI_ROUTER_URL + '/v1/chat/completions', {
         method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + key,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin && window.location.origin !== 'null' ? window.location.origin : 'https://oblivionx-ui.vercel.app/',
-          'X-Title': 'OblivionX'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: aiModel.value,
           messages: aiMessages.slice(0, -1).concat([{ role: 'user', content: prompt }]),
@@ -3950,15 +4039,15 @@
       });
 
       if (!response.ok) {
-        let detail = 'HTTP ' + response.status;
+        let detail = '';
         try {
           const errorData = await response.json();
-          detail = errorData?.error?.message || errorData?.message || detail;
+          detail = errorData?.error?.message || errorData?.message || '';
         } catch (_) {}
-        throw new Error(detail);
+        throw Object.assign(new Error(detail), { httpStatus: response.status });
       }
 
-      if (!response.body) throw new Error('The AI response did not include a readable stream.');
+      if (!response.body) throw new Error('No readable stream in response.');
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -3993,12 +4082,21 @@
       aiMessages.push({ role: 'assistant', content: assistantText });
       saveAiHistory();
       setAiStatus('');
+
+      // Mark backend as confirmed online after successful request
+      setBackendStatus(true);
+
     } catch (error) {
       assistantBubble.remove();
-      setAiStatus('AI request failed: ' + (error?.message || String(error)), true);
-      // Remove the user message because the request did not complete.
+      const msg = friendlyAiError(error.httpStatus, error?.message);
+      setAiStatus(msg, true);
+      // Remove the user message because the request did not complete
       aiMessages.pop();
       saveAiHistory();
+      // If it looks like a network/offline error, update status
+      if (!error.httpStatus || error.httpStatus >= 500) {
+        setBackendStatus(false);
+      }
     } finally {
       aiBusy = false;
       aiSend.disabled = false;
@@ -4007,14 +4105,8 @@
     }
   }
 
-  aiSaveKey.addEventListener('click', () => {
-    saveAiSettings();
-    setAiStatus(aiApiKey.value.trim() ? 'API key saved locally.' : 'API key cleared.');
-  });
-
-  aiModel.addEventListener('change', () => {
-    saveAiSettings();
-  });
+  // ---- Event listeners ----
+  aiModel.addEventListener('change', saveAiModel);
 
   aiClearChat.addEventListener('click', () => {
     aiMessages = [];
@@ -4032,7 +4124,8 @@
     }
   });
 
-  loadAiSettings();
+  // ---- Init ----
+  loadAiModel();
   loadAiHistory();
 
     const TOUR_STEPS = [
