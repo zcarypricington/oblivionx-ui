@@ -313,6 +313,153 @@
   .settings-card-control{display:flex;align-items:center;gap:9px;flex-shrink:0;}
   .settings-card-state{font-size:12px;font-weight:500;color:var(--text-dim);min-width:22px;}
 
+  .clients-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--editor);
+  overflow: hidden;
+}
+.clients-page[hidden] { display: none; }
+
+.clients-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.clients-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.clients-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139,92,246,0.22) transparent;
+}
+.clients-grid::-webkit-scrollbar { width: 8px; }
+.clients-grid::-webkit-scrollbar-track { background: transparent; }
+.clients-grid::-webkit-scrollbar-thumb {
+  background: rgba(139,92,246,0.18);
+  border-radius: 8px;
+  border: 2px solid var(--editor);
+}
+
+.clients-empty {
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+/* Client card */
+.client-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--toolbar);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 12px 16px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  animation: logIn .22s ease both;
+}
+.client-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.client-card.attached {
+  border-color: rgba(168,85,247,0.35);
+  box-shadow: 0 0 0 1px rgba(168,85,247,0.15);
+}
+
+.client-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+}
+.client-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--gutter);
+  display: block;
+}
+.client-avatar-ph {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+}
+.client-avatar-ph svg { width: 22px; height: 22px; }
+.client-attach-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--toolbar);
+  background: var(--text-faint);
+}
+.client-card.attached .client-attach-dot {
+  background: var(--ok);
+  box-shadow: 0 0 6px rgba(126,231,135,0.5);
+}
+
+.client-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.client-username {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.client-game {
+  font-size: 12px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.client-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 2px;
+}
+.client-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  flex-shrink: 0;
+}
+.client-card.attached .client-status-dot { background: var(--ok); }
+
   @keyframes tourFadeOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(4px);}}
   .tour-overlay{position:fixed;inset:0;z-index:500;pointer-events:none;}
   .tour-overlay[hidden]{display:none;}
@@ -361,6 +508,13 @@
       <button class="icon-btn tip-down active" data-tip="Editor" id="navEditorBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></button>
       <button class="icon-btn tip-down" data-tip="Script Hub" id="navHubBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></button>
       <button class="icon-btn tip-down" data-tip="Settings" id="navSettingsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.5a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      <button class="icon-btn tip-down" data-tip="Clients" id="navClientsBtn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="8" cy="7" r="3.5"/><circle cx="16" cy="7" r="3.5"/>
+    <path d="M2 20c0-3.3 2.7-6 6-6h1"/><path d="M22 20c0-3.3-2.7-6-6-6h-1"/>
+    <circle cx="12" cy="17" r="3.5"/>
+  </svg>
+</button>
       <div class="win-divider"></div>
       <button class="icon-btn tip-down" data-tip="Minimize" id="winMinimizeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></button>
       <button class="icon-btn maximize tip-down" data-tip="Maximize" id="winMaximizeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="5" y="5" rx="2"/></svg></button>
@@ -564,6 +718,20 @@
     </div>
   </div>
 
+  <div class="clients-page" id="clientsPage" hidden>
+  <div class="clients-header">
+    <span class="clients-title">ACTIVE CLIENTS</span>
+    <button class="icon-btn small" id="btnRefreshClients" data-tip="Refresh">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+        <path d="M21 3v5h-5"/><path d="M3 21v-5h5"/>
+      </svg>
+    </button>
+  </div>
+  <div class="clients-grid" id="clientsGrid"></div>
+  <div class="clients-empty" id="clientsEmpty" hidden>No Roblox clients detected.</div>
+</div>
+
   <input type="file" id="fileInput" accept=".lua,.txt" style="display:none">
 
   <div class="color-picker" id="colorPicker" hidden>
@@ -758,6 +926,118 @@
     if(document.fonts&&document.fonts.ready){document.fonts.load(initialEditorFontSize+'px '+getEditorFontFamily()).catch(()=>{});document.fonts.ready.then(()=>{monaco.editor.remeasureFonts();});}
     editorLoading.remove();
   });
+
+// ── CLIENTS TAB ──────────────────────────────────────────────────────────────
+const navClientsBtn = document.getElementById('navClientsBtn');
+const clientsPage   = document.getElementById('clientsPage');
+const clientsGrid   = document.getElementById('clientsGrid');
+const clientsEmpty  = document.getElementById('clientsEmpty');
+const btnRefreshClients = document.getElementById('btnRefreshClients');
+
+// Wire nav button into the existing showPage system
+navClientsBtn.addEventListener('click', () => showPage('clients'));
+
+// Patch showPage to handle the new page
+const _origShowPage = showPage;
+showPage = function(name) {
+  _origShowPage(name);
+  clientsPage.hidden = (name !== 'clients');
+  navClientsBtn.classList.toggle('active', name === 'clients');
+  if (name === 'clients') {
+    clientsPage.classList.remove('page-enter');
+    void clientsPage.offsetWidth;
+    clientsPage.classList.add('page-enter');
+    refreshClients();
+  }
+};
+
+// Client data — populated by WebView2 message or manual refresh
+let clientList = [];
+
+// WebView2 bridge: backend sends { action: 'clients', clients: [...] }
+// Each client: { pid, username, game, headshotUrl, attached }
+if (hasWebView2()) {
+  window.chrome.webview.addEventListener('message', (evt) => {
+    let data;
+    try { data = typeof evt.data === 'string' ? JSON.parse(evt.data) : evt.data; } catch(e) { return; }
+    if (!data || data.action !== 'clients') return;
+    clientList = Array.isArray(data.clients) ? data.clients : [];
+    renderClients();
+  });
+}
+
+function refreshClients() {
+  // Ask the backend for the current client list
+  // Backend responds with { action: 'clients', clients: [...] }
+  if (!webviewPost('get-clients')) {
+    // Browser fallback: render whatever is in clientList
+    renderClients();
+  }
+}
+
+function renderClients() {
+  clientsGrid.innerHTML = '';
+
+  if (!clientList.length) {
+    clientsEmpty.hidden = false;
+    return;
+  }
+  clientsEmpty.hidden = true;
+
+  // Attached clients first
+  const sorted = [...clientList].sort((a, b) => (b.attached ? 1 : 0) - (a.attached ? 1 : 0));
+
+  sorted.forEach(client => {
+    const card = document.createElement('div');
+    card.className = 'client-card' + (client.attached ? ' attached' : '');
+
+    const avatarHtml = client.headshotUrl
+      ? `<img class="client-avatar" src="${escapeHtml(client.headshotUrl)}"
+             loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+         <div class="client-avatar-ph" style="display:none">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <circle cx="12" cy="8" r="3.2"/>
+             <path d="M4.5 19.2c.9-3.8 3.6-5.7 7.5-5.7s6.6 1.9 7.5 5.7"/>
+           </svg>
+         </div>`
+      : `<div class="client-avatar-ph">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <circle cx="12" cy="8" r="3.2"/>
+             <path d="M4.5 19.2c.9-3.8 3.6-5.7 7.5-5.7s6.6 1.9 7.5 5.7"/>
+           </svg>
+         </div>`;
+
+    const statusText = client.attached ? 'Attached' : 'Idle';
+
+    card.innerHTML = `
+      <div class="client-avatar-wrap">
+        ${avatarHtml}
+        <span class="client-attach-dot"></span>
+      </div>
+      <div class="client-info">
+        <div class="client-username">${escapeHtml(client.username || 'Unknown')}</div>
+        <div class="client-game">${escapeHtml(client.game || 'Unknown')}</div>
+        <div class="client-meta">
+          <span class="client-status-dot"></span>
+          ${escapeHtml(statusText)}
+          <span>·</span>
+          PID ${escapeHtml(String(client.pid || '—'))}
+        </div>
+      </div>`;
+
+    clientsGrid.appendChild(card);
+  });
+}
+
+btnRefreshClients.addEventListener('click', refreshClients);
+
+// Auto-refresh every 5s while clients tab is visible
+setInterval(() => {
+  if (!clientsPage.hidden) refreshClients();
+}, 5000);
+// ── END CLIENTS TAB ──────────────────────────────────────────────────────────
+
 })();
 
 // Code-behind helpers exposed for WPF/WebView2 integration:
