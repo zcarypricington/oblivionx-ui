@@ -971,6 +971,8 @@ showPage = function(name) {
 
 // Client data — populated by WebView2 message or manual refresh
 let clientList = [];
+let clientsRequestPending = false;
+let clientsRequestTimer = null;
 
 // WebView2 bridge: backend sends { action: 'clients', clients: [...] }
 // Each client includes profile/game metadata: { pid, userId, username, displayName, headshotUrl, game, placeId, universeId, gameIconUrl, attached }
@@ -979,28 +981,42 @@ if (hasWebView2()) {
     let data;
     try { data = typeof evt.data === 'string' ? JSON.parse(evt.data) : evt.data; } catch(e) { return; }
     if (!data || data.action !== 'clients') return;
+    clientsRequestPending = false;
+    clearTimeout(clientsRequestTimer);
+    clientsRequestTimer = null;
     clientList = Array.isArray(data.clients) ? data.clients : [];
-    renderClients(data.error || null);
+    renderClients();
   });
 }
 
 function refreshClients() {
-  // Ask the backend for the current client list
-  // Backend responds with { action: 'clients', clients: [...] }
-  if (!webviewPost('get-clients')) {
-    // Browser fallback: render whatever is in clientList
+  if (clientsRequestPending) return;
+  if (!hasWebView2()) {
+    clientList = [];
     renderClients();
-  }
-}
-
-function renderClients(error = null) {
-  clientsGrid.innerHTML = '';
-
-  if (error) {
-    clientsEmpty.textContent = 'Clients Failed: ' + String(error);
-    clientsEmpty.hidden = false;
     return;
   }
+
+  clientsRequestPending = true;
+  try {
+    window.chrome.webview.postMessage({ action: 'get-clients' });
+  } catch (e) {
+    clientsRequestPending = false;
+    clientList = [];
+    renderClients();
+    return;
+  }
+  clearTimeout(clientsRequestTimer);
+  clientsRequestTimer = setTimeout(() => {
+    clientsRequestPending = false;
+    clientsRequestTimer = null;
+    clientList = [];
+    renderClients();
+  }, 8000);
+}
+
+function renderClients() {
+  clientsGrid.innerHTML = '';
 
   if (!clientList.length) {
     clientsEmpty.textContent = 'No Roblox clients detected.';
