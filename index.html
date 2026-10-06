@@ -452,6 +452,21 @@
 }
 .client-game-details { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .client-place-id { font-size: 10px; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
+.client-attach-btn {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 7px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--text);
+  background: rgba(168,85,247,0.12);
+  font: 500 12px var(--ui-font);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, opacity .15s ease;
+}
+.client-attach-btn:hover:not(:disabled) { background: rgba(168,85,247,0.22); border-color: var(--accent); }
+.client-attach-btn:disabled { opacity: .6; cursor: default; }
+.client-card.attached .client-attach-btn { color: var(--ok); background: rgba(126,231,135,0.08); border-color: rgba(126,231,135,0.25); }
 .client-game {
   font-size: 12px;
   color: var(--text-dim);
@@ -952,6 +967,22 @@ const clientsGrid   = document.getElementById('clientsGrid');
 const clientsEmpty  = document.getElementById('clientsEmpty');
 const btnRefreshClients = document.getElementById('btnRefreshClients');
 
+if (hasWebView2()) {
+  window.chrome.webview.addEventListener('message', (evt) => {
+    let data;
+    try { data = typeof evt.data === 'string' ? JSON.parse(evt.data) : evt.data; } catch(e) { return; }
+    if (!data || data.action !== 'attach-client') return;
+
+    const attachButton = [...clientsGrid.querySelectorAll('.client-attach-btn')]
+      .find(button => button.dataset.pid === String(data.pid));
+    if (!attachButton) return;
+
+    attachButton.disabled = !!data.ok;
+    attachButton.textContent = data.ok ? 'Attached' : 'Retry';
+    if (data.ok) attachButton.closest('.client-card')?.classList.add('attached');
+  });
+}
+
 // Wire nav button into the existing showPage system
 navClientsBtn.addEventListener('click', () => showPage('clients'));
 
@@ -1059,6 +1090,25 @@ function renderClients() {
       ? `<img class="client-game-icon" src="${escapeHtml(client.gameIconUrl)}" alt="" loading="lazy" onerror="this.style.display='none';">`
       : '<div class="client-game-icon" aria-hidden="true"></div>';
     const placeText = client.placeId ? `Place ID ${escapeHtml(String(client.placeId))}` : 'Place ID unavailable';
+    const attachButton = document.createElement('button');
+    attachButton.className = 'client-attach-btn';
+    attachButton.dataset.pid = String(client.pid || '');
+    attachButton.textContent = client.attached ? 'Attached' : 'Attach';
+    attachButton.disabled = !!client.attached || !client.pid;
+    attachButton.addEventListener('click', () => {
+      attachButton.disabled = true;
+      attachButton.textContent = 'Attaching…';
+      if (!webviewPost('attach-client', { pid: Number(client.pid) })) {
+        attachButton.disabled = false;
+        attachButton.textContent = 'Retry';
+      }
+      setTimeout(() => {
+        if (attachButton.isConnected && attachButton.textContent === 'Attaching…') {
+          attachButton.disabled = false;
+          attachButton.textContent = 'Retry';
+        }
+      }, 15000);
+    });
 
     card.innerHTML = `
       <div class="client-avatar-wrap">
@@ -1084,6 +1134,7 @@ function renderClients() {
       </div>`;
 
     clientsGrid.appendChild(card);
+    card.appendChild(attachButton);
   });
 }
 
