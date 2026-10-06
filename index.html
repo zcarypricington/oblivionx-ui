@@ -1140,10 +1140,6 @@ function renderClients() {
 
 btnRefreshClients.addEventListener('click', refreshClients);
 
-// Auto-refresh every 5s while clients tab is visible
-setInterval(() => {
-  if (!clientsPage.hidden) refreshClients();
-}, 5000);
 // ── END CLIENTS TAB ──────────────────────────────────────────────────────────
 
 })();
