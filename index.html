@@ -434,6 +434,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.client-user-handle {
+  font-size: 11px;
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.client-game-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.client-game-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--gutter);
+  flex-shrink: 0;
+}
+.client-game-details { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.client-place-id { font-size: 10px; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
 .client-game {
   font-size: 12px;
   color: var(--text-dim);
@@ -955,14 +973,14 @@ showPage = function(name) {
 let clientList = [];
 
 // WebView2 bridge: backend sends { action: 'clients', clients: [...] }
-// Each client: { pid, username, game, headshotUrl, attached }
+// Each client includes profile/game metadata: { pid, userId, username, displayName, headshotUrl, game, placeId, universeId, gameIconUrl, attached }
 if (hasWebView2()) {
   window.chrome.webview.addEventListener('message', (evt) => {
     let data;
     try { data = typeof evt.data === 'string' ? JSON.parse(evt.data) : evt.data; } catch(e) { return; }
     if (!data || data.action !== 'clients') return;
     clientList = Array.isArray(data.clients) ? data.clients : [];
-    renderClients();
+    renderClients(data.error || null);
   });
 }
 
@@ -975,10 +993,17 @@ function refreshClients() {
   }
 }
 
-function renderClients() {
+function renderClients(error = null) {
   clientsGrid.innerHTML = '';
 
+  if (error) {
+    clientsEmpty.textContent = 'Clients Failed: ' + String(error);
+    clientsEmpty.hidden = false;
+    return;
+  }
+
   if (!clientList.length) {
+    clientsEmpty.textContent = 'No Roblox clients detected.';
     clientsEmpty.hidden = false;
     return;
   }
@@ -1009,6 +1034,15 @@ function renderClients() {
          </div>`;
 
     const statusText = client.attached ? 'Attached' : 'Idle';
+    const displayName = client.displayName || client.username || 'Unknown Player';
+    const username = client.username || '';
+    const userHandle = username && username.toLowerCase() !== displayName.toLowerCase()
+      ? `<div class="client-user-handle">@${escapeHtml(username)}</div>`
+      : '';
+    const gameIconHtml = client.gameIconUrl
+      ? `<img class="client-game-icon" src="${escapeHtml(client.gameIconUrl)}" alt="" loading="lazy" onerror="this.style.display='none';">`
+      : '<div class="client-game-icon" aria-hidden="true"></div>';
+    const placeText = client.placeId ? `Place ID ${escapeHtml(String(client.placeId))}` : 'Place ID unavailable';
 
     card.innerHTML = `
       <div class="client-avatar-wrap">
@@ -1016,8 +1050,15 @@ function renderClients() {
         <span class="client-attach-dot"></span>
       </div>
       <div class="client-info">
-        <div class="client-username">${escapeHtml(client.username || 'Unknown')}</div>
-        <div class="client-game">${escapeHtml(client.game || 'Unknown')}</div>
+        <div class="client-username">${escapeHtml(displayName)}</div>
+        ${userHandle}
+        <div class="client-game-row">
+          ${gameIconHtml}
+          <div class="client-game-details">
+            <div class="client-game">${escapeHtml(client.game || 'Game unavailable')}</div>
+            <div class="client-place-id">${placeText}</div>
+          </div>
+        </div>
         <div class="client-meta">
           <span class="client-status-dot"></span>
           ${escapeHtml(statusText)}
