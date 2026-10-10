@@ -330,31 +330,42 @@
   .settings-card-control{display:flex;align-items:center;gap:9px;flex-shrink:0;}
   .settings-card-state{font-size:12px;font-weight:500;color:var(--text-dim);min-width:22px;}
 
+  .clients-backdrop{position:absolute;inset:0;z-index:110;background:rgba(2,1,8,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease;}
+.clients-backdrop.open{opacity:1;}
+.clients-backdrop[hidden]{display:none;}
+
   .clients-page {
-  flex: 1;
-  min-height: 0;
+  position:absolute;top:0;right:0;bottom:0;width:min(360px,86%);z-index:120;
   display: flex;
   flex-direction: column;
-  background: var(--editor);
+  background: var(--win);
+  border-left:1px solid var(--border-strong);
+  box-shadow:-24px 0 60px rgba(0,0,0,.55);
+  transform:translateX(103%);transition:transform .28s cubic-bezier(.32,.72,.24,1);
   overflow: hidden;
 }
+.clients-page.open{transform:none;}
 .clients-page[hidden] { display: none; }
 
 .clients-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px 10px;
+  gap:10px;
+  padding: 16px 14px 14px 18px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
+.client-panel-logo{width:22px;height:22px;color:var(--text);flex-shrink:0;}
 .clients-title {
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-faint);
+  flex:1;min-width:0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  color: var(--text);
 }
+.clients-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;}
 
 .clients-grid {
   flex: 1;
@@ -374,12 +385,16 @@
   border: 2px solid var(--editor);
 }
 
+.clients-grid[hidden]{display:none;}
 .clients-empty {
-  padding: 32px 16px;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;padding:24px 16px 64px;
   text-align: center;
   font-size: 13px;
   color: var(--text-faint);
 }
+.clients-empty[hidden]{display:none;}
+.roblox-mark{width:46px;height:46px;color:var(--text-faint);opacity:.75;}
 
 /* Client card */
 .client-card {
@@ -789,18 +804,23 @@
     </div>
   </div>
 
+  <div class="clients-backdrop" id="clientsBackdrop" hidden></div>
   <div class="clients-page" id="clientsPage" hidden>
   <div class="clients-header">
-    <span class="clients-title">ACTIVE CLIENTS</span>
+    <svg class="client-panel-logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M18 30 L70 20 L80 72 L28 82 Z M41 46 L57 43 L60 59 L44 62 Z" fill="currentColor" fill-rule="evenodd"/></svg>
+    <span class="clients-title">Clients</span>
+    <div class="clients-actions">
     <button class="icon-btn small" id="btnRefreshClients" data-tip="Refresh">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
         <path d="M21 3v5h-5"/><path d="M3 21v-5h5"/>
       </svg>
     </button>
+    <button class="icon-btn small" id="btnCloseClients" data-tip="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    </div>
   </div>
   <div class="clients-grid" id="clientsGrid"></div>
-  <div class="clients-empty" id="clientsEmpty" hidden>No Roblox clients detected.</div>
+  <div class="clients-empty" id="clientsEmpty" hidden><svg class="roblox-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M18 30 L70 20 L80 72 L28 82 Z M41 46 L57 43 L60 59 L44 62 Z" fill="currentColor" fill-rule="evenodd"/></svg><span id="clientsEmptyText">No Roblox process found</span></div>
 </div>
 
   <input type="file" id="fileInput" accept=".lua,.txt" style="display:none">
@@ -1136,22 +1156,34 @@ if (hasWebView2()) {
   });
 }
 
-// Wire nav button into the existing showPage system
-navClientsBtn.addEventListener('click', () => showPage('clients'));
-
-// Patch showPage to handle the new page
-const _origShowPage = showPage;
-showPage = function(name) {
-  _origShowPage(name);
-  clientsPage.hidden = (name !== 'clients');
-  navClientsBtn.classList.toggle('active', name === 'clients');
-  if (name === 'clients') {
-    clientsPage.classList.remove('page-enter');
-    void clientsPage.offsetWidth;
-    clientsPage.classList.add('page-enter');
-    refreshClients();
-  }
-};
+// Clients opens as an overlay side panel; the page behind stays put and blurs.
+const clientsBackdrop = document.getElementById('clientsBackdrop');
+const btnCloseClients = document.getElementById('btnCloseClients');
+const clientsEmptyText = document.getElementById('clientsEmptyText');
+let clientsHideTimer = null;
+function isClientsPanelOpen(){return clientsPage.classList.contains('open');}
+function openClientsPanel(){
+  clearTimeout(clientsHideTimer);
+  clientsPage.hidden = false;
+  clientsBackdrop.hidden = false;
+  void clientsPage.offsetWidth;
+  clientsPage.classList.add('open');
+  clientsBackdrop.classList.add('open');
+  navClientsBtn.classList.add('active');
+  refreshClients();
+}
+function closeClientsPanel(){
+  if(!isClientsPanelOpen() && clientsPage.hidden) return;
+  clientsPage.classList.remove('open');
+  clientsBackdrop.classList.remove('open');
+  navClientsBtn.classList.remove('active');
+  clearTimeout(clientsHideTimer);
+  clientsHideTimer = setTimeout(()=>{clientsPage.hidden = true;clientsBackdrop.hidden = true;},300);
+}
+navClientsBtn.addEventListener('click',()=>{if(isClientsPanelOpen())closeClientsPanel();else openClientsPanel();});
+btnCloseClients.addEventListener('click',closeClientsPanel);
+clientsBackdrop.addEventListener('click',closeClientsPanel);
+document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&isClientsPanelOpen())closeClientsPanel();});
 
 // Client data — populated by WebView2 message or manual refresh
 let clientList = [];
@@ -1203,10 +1235,12 @@ function renderClients() {
   clientsGrid.innerHTML = '';
 
   if (!clientList.length) {
-    clientsEmpty.textContent = 'No Roblox clients detected.';
+    clientsEmptyText.textContent = 'No Roblox process found';
+    clientsGrid.hidden = true;
     clientsEmpty.hidden = false;
     return;
   }
+  clientsGrid.hidden = false;
   clientsEmpty.hidden = true;
 
   // Attached clients first
