@@ -49,6 +49,9 @@
   body.compact .hub-scroll{padding:12px 12px 64px;}
   body.reduce-motion *{animation:none !important;transition:none !important;}
   .console-body.wrap-lines .log-line span:last-child{white-space:pre-wrap;word-break:break-word;}
+  #starCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:998;pointer-events:none;opacity:.8;}
+  #starCanvas[hidden]{display:none;}
+  body.reduce-motion #starCanvas{opacity:.5;}
 
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{height:100%;}
@@ -560,6 +563,7 @@
 </head>
 <body>
 
+<canvas id="starCanvas"></canvas>
 <div class="window">
 
   <div class="titlebar">
@@ -712,6 +716,7 @@
         </div>
       </div>
       <div class="settings-pane" data-pane="appearance" hidden>
+        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M18.4 5.6 16.3 7.7"/><path d="M21 12h-3"/><path d="M18.4 18.4l-2.1-2.1"/><path d="M12 18v3"/><path d="M7.8 16.2l-2.2 2.2"/><path d="M6 12H3"/><path d="M7.8 7.8 5.6 5.6"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Starry Background</div><div class="settings-card-desc">Show softly twinkling stars across the app.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="starfieldToggle" checked><span class="switch-track"></span></label><span class="settings-card-state" id="starfieldState">On</span></div></div>
         <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Compact UI</div><div class="settings-card-desc">Reduce padding across the titlebar, toolbar, and cards.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="compactToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="compactState">Off</span></div></div>
         <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Reduce Motion</div><div class="settings-card-desc">Disable animations and transitions throughout the app.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="reduceMotionToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="reduceMotionState">Off</span></div></div>
         <div class="settings-card">
@@ -1073,6 +1078,16 @@
   bindSettingToggle('intelToggle','intelState','oblivionxUiIntelSense',true,function(){});
   bindSettingSlider('consoleFontSizeSlider','consoleFontSizeSliderValue','oblivionxUiConsoleFontSize',13,function(v){return v+'px';},function(v){if(consoleBody)consoleBody.style.fontSize=v+'px';});
   bindSettingToggle('consoleWrapToggle','consoleWrapState','oblivionxUiConsoleWrap',false,function(on){if(consoleBody)consoleBody.classList.toggle('wrap-lines',on);});
+  const starCanvas=document.getElementById('starCanvas');const starCtx=starCanvas.getContext('2d');let stars=[];let starRaf=null;
+  function starfieldEnabled(){try{return localStorage.getItem('oblivionxUiStarfield')!=='off';}catch(e){return true;}}
+  function sizeStarCanvas(){var dpr=Math.min(window.devicePixelRatio||1,2);starCanvas.width=Math.floor(window.innerWidth*dpr);starCanvas.height=Math.floor(window.innerHeight*dpr);starCtx.setTransform(dpr,0,0,dpr,0,0);}
+  function seedStars(){stars=[];var n=Math.floor(window.innerWidth*window.innerHeight/14000);n=Math.max(60,Math.min(220,n));for(var i=0;i<n;i++){stars.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()<0.85?1:2,base:0.2+Math.random()*0.45,amp:0.12+Math.random()*0.3,speed:0.4+Math.random()*1.4,phase:Math.random()*6.283});}}
+  function drawStars(t){starCtx.clearRect(0,0,window.innerWidth,window.innerHeight);var reduce=false;try{reduce=localStorage.getItem('oblivionxUiReduceMotion')==='on';}catch(e){}starCtx.fillStyle='#fff';for(var i=0;i<stars.length;i++){var s=stars[i];var a=reduce?s.base:s.base+Math.sin(t*0.001*s.speed+s.phase)*s.amp;if(a<0.03)a=0.03;starCtx.globalAlpha=Math.min(1,a);starCtx.fillRect(s.x,s.y,s.r,s.r);}starCtx.globalAlpha=1;}
+  function starLoop(t){if(starCanvas.hidden){starRaf=null;return;}drawStars(t||0);starRaf=requestAnimationFrame(starLoop);}
+  function restartStars(){if(starRaf)cancelAnimationFrame(starRaf);starRaf=null;if(!starfieldEnabled()){starCanvas.hidden=true;return;}starCanvas.hidden=false;sizeStarCanvas();seedStars();starRaf=requestAnimationFrame(starLoop);}
+  window.addEventListener('resize',()=>{if(!starCanvas.hidden){sizeStarCanvas();seedStars();}});
+  restartStars();
+  bindSettingToggle('starfieldToggle','starfieldState','oblivionxUiStarfield',true,function(){restartStars();});
   const consoleMaxLinesSlider=document.getElementById('consoleMaxLinesSlider');const consoleMaxLinesSliderValue=document.getElementById('consoleMaxLinesSliderValue');function applyConsoleMaxLinesSlider(n){consoleMaxLinesSliderValue.textContent=String(n);const min=Number(consoleMaxLinesSlider.min),max=Number(consoleMaxLinesSlider.max);const pct=((n-min)/(max-min))*100;consoleMaxLinesSlider.style.background='linear-gradient(to right, var(--accent) '+pct+'%, rgba(255,255,255,0.12) '+pct+'%)';}consoleMaxLinesSlider.value=consoleMaxLines;applyConsoleMaxLinesSlider(consoleMaxLines);consoleMaxLinesSlider.addEventListener('input',()=>{consoleMaxLines=Number(consoleMaxLinesSlider.value);applyConsoleMaxLinesSlider(consoleMaxLines);while(consoleBody.childElementCount>consoleMaxLines){consoleBody.removeChild(consoleBody.firstElementChild);}});consoleMaxLinesSlider.addEventListener('change',()=>{try{localStorage.setItem('oblivionxUiConsoleMaxLines',consoleMaxLinesSlider.value);}catch(e){}});
   const consoleAutoscrollToggle=document.getElementById('consoleAutoscrollToggle');const consoleAutoscrollState=document.getElementById('consoleAutoscrollState');consoleAutoscrollToggle.checked=consoleAutoscroll;consoleAutoscrollState.textContent=consoleAutoscroll?'On':'Off';consoleAutoscrollToggle.addEventListener('change',()=>{consoleAutoscroll=consoleAutoscrollToggle.checked;consoleAutoscrollState.textContent=consoleAutoscroll?'On':'Off';try{localStorage.setItem('oblivionxUiConsoleAutoscroll',consoleAutoscroll?'on':'off');}catch(e){}if(consoleAutoscroll)consoleBody.scrollTop=consoleBody.scrollHeight;});
   const consoleTimestampsToggle=document.getElementById('consoleTimestampsToggle');const consoleTimestampsState=document.getElementById('consoleTimestampsState');function applyConsoleTimestamps(on){consoleBody.classList.toggle('hide-timestamps',!on);consoleTimestampsState.textContent=on?'On':'Off';}let savedTimestamps=true;try{savedTimestamps=localStorage.getItem('oblivionxUiConsoleTimestamps')!=='off';}catch(e){}consoleTimestampsToggle.checked=savedTimestamps;applyConsoleTimestamps(savedTimestamps);consoleTimestampsToggle.addEventListener('change',()=>{applyConsoleTimestamps(consoleTimestampsToggle.checked);try{localStorage.setItem('oblivionxUiConsoleTimestamps',consoleTimestampsToggle.checked?'on':'off');}catch(e){}});
