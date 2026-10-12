@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Terms — OblivionX</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --base: #050505;
+      --card: #101013;
+      --line: rgba(255,255,255,0.09);
+      --blue: #7aa5ff;
+      --text: #f2f2f4;
+      --muted: #8e8e93;
+      --dim: #4a4a4e;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--base);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0 20px 60px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .dots {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.13) 1px, transparent 1.4px);
+      background-size: 22px 22px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 10%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 10%, transparent 75%);
+    }
+    nav {
+      position: relative; z-index: 1; width: 100%; max-width: 720px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 26px 4px 0;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 9px;
+      font-weight: 700; font-size: 15px; color: var(--text); text-decoration: none;
+    }
+    .nav-logo svg { width: 18px; height: 18px; }
+    .nav-logo em { font-style: normal; color: var(--blue); }
+    .nav-back { font-size: 12.5px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--text); }
+    .wrap { position: relative; z-index: 1; width: 100%; max-width: 720px; margin-top: 8vh; }
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 14px;
+    }
+    h1 { font-weight: 700; font-size: clamp(32px, 5.5vw, 50px); letter-spacing: -0.04em; margin-bottom: 30px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 30px 30px 12px;
+      margin-bottom: 14px;
+    }
+    .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .card p, .card li { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+    .card p { margin-bottom: 18px; }
+    .card ul { margin: 0 0 18px 18px; }
+    .updated { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--dim); margin-top: 22px; }
+  </style>
+</head>
+<body>
+  <div class="dots" aria-hidden="true"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 13.2A8.2 8.2 0 0 1 10.8 4 8.2 8.2 0 1 0 20 13.2z"/></svg>
+      Oblivion<em>X</em>
+    </a>
+    <a href="index.html" class="nav-back">← home</a>
+  </nav>
+
+  <div class="wrap">
+    <p class="eyebrow">LEGAL</p>
+    <h1>Terms of Use &amp; Disclaimer</h1>
+
+    <div class="card">
+      <h2>1. What this software is</h2>
+      <p>OblivionX is a third-party tool for the Roblox client, provided for educational and testing purposes. It is not affiliated with, endorsed, or sponsored by Roblox Corporation.</p>
+    </div>
+    <div class="card">
+      <h2>2. Account risk</h2>
+      <p>Using third-party executors violates Roblox's Terms of Service and can result in warnings, suspensions, or permanent termination of your Roblox account. Use alternate accounts. You accept this risk by downloading.</p>
+    </div>
+    <div class="card">
+      <h2>3. Keys</h2>
+      <ul>
+        <li>Keys are valid for 24 hours and lock to the first machine (HWID) that uses them.</li>
+        <li>Do not share keys. A shared key becomes unusable to you once redeemed elsewhere.</li>
+        <li>Abuse of the key system (farming, reselling, automation) leads to HWID blacklists.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>4. Acceptable use</h2>
+      <ul>
+        <li>No malicious scripts, credential theft, or targeting other users.</li>
+        <li>No redistributing modified or repackaged copies of the installer.</li>
+        <li>Only download from this site or our official Discord.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>5. No warranty</h2>
+      <p>The software is provided "as is" without warranties of any kind. We are not liable for banned accounts, lost data, or any damage arising from use.</p>
+    </div>
+
+    <p class="updated">LAST UPDATED · OCT 2026</p>
+  </div>
+</body>
+</html>

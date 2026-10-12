@@ -1,0 +1,9 @@
+{
+  "name": "oblivionx-download",
+  "version": "15.0.0",
+  "private": true,
+  "description": "OblivionX download site + key system API",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  }
+}
