@@ -704,6 +704,7 @@
       <button class="settings-nav-item" data-pane="appearance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8Z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>Appearance</button>
       <button class="settings-nav-item" data-pane="editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Editor</button>
       <button class="settings-nav-item" data-pane="console"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>Console</button>
+      <button class="settings-nav-item" data-pane="key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 10-10"/><path d="m15 8 3 3"/></svg>Key</button>
     </div>
     <div class="settings-content">
       <div class="settings-pane active" data-pane="general">
@@ -799,6 +800,11 @@
         <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 4 4-4 4"/><line x1="11" y1="12" x2="21" y2="12"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Tab Size</div><div class="settings-card-desc">Number of spaces a single indent level uses.</div></div><div class="settings-card-control settings-slider-control"><input type="range" class="settings-slider" id="editorTabSizeSlider" min="2" max="8" step="1" value="4"><span class="settings-slider-value" id="editorTabSizeSliderValue">4</span></div></div>
         <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Auto-Closing Brackets</div><div class="settings-card-desc">Insert matching brackets when typing.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorAutoClosingToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorAutoClosingState">Off</span></div></div>
         <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Line Numbers</div><div class="settings-card-desc">How line numbers are shown in the editor gutter.</div></div><div class="settings-card-control"><div class="dropdown" id="editorLineNumbersDropdown"><button class="settings-select-trigger dropdown-trigger" id="editorLineNumbersTrigger" aria-expanded="false"><span class="settings-select-value" id="editorLineNumbersValue">On</span><svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dropdown-panel dropdown-panel-sm" id="editorLineNumbersPanel"><div class="dropdown-row dropdown-row-option" data-value="on" aria-selected="true"><div class="dropdown-row-title">On</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="relative" aria-selected="false"><div class="dropdown-row-title">Relative</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="off" aria-selected="false"><div class="dropdown-row-title">Off</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div></div></div></div></div>
+      </div>
+      <div class="settings-pane" data-pane="key" hidden>
+        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 10-10"/><path d="m15 8 3 3"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Key Status</div><div class="settings-card-desc" id="keyStatusDesc">Checking…</div></div><div class="settings-card-control"><button class="mini-btn" id="keyRefreshBtn">Refresh</button></div></div>
+        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="settings-card-text"><div class="settings-card-title">HWID</div><div class="settings-card-desc" id="hwidValue" style="font-family:'JetBrains Mono',monospace;">…</div></div><div class="settings-card-control"><button class="mini-btn" id="copyHwidBtn">Copy</button></div></div>
+        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/><path d="M9 20h6"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Enter Key</div><div class="settings-card-desc">Paste a key from the Get Key page, then Save.</div><div class="settings-card-desc" id="keyMsg"></div></div><div class="settings-card-control"><input class="console-filter-input" id="keyInput" placeholder="OBX-XXXXXX-XXXXXX" autocomplete="off" spellcheck="false" style="flex:1;min-width:120px;"><button class="mini-btn" id="saveKeyBtn">Save</button></div></div>
       </div>
       <div class="settings-pane" data-pane="console" hidden>
         <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/><path d="M9 20h6"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Console Font Size</div><div class="settings-card-desc">Text size of console log lines.</div></div><div class="settings-card-control settings-slider-control"><input type="range" class="settings-slider" id="consoleFontSizeSlider" min="11" max="17" step="1" value="13"><span class="settings-slider-value" id="consoleFontSizeSliderValue">13px</span></div></div>
@@ -1343,6 +1349,53 @@ function renderClients() {
 }
 
 btnRefreshClients.addEventListener('click', refreshClients);
+
+// ── KEY PANE (Settings → Key) ────────────────────────────────────────
+// Backend: WebView2 bridge actions 'get-key-state' / 'save-key'.
+// Replies arrive as { action: 'key-state', installed, valid, expires_at,
+// key (masked), hwid, message }. Routine state replies carry no `ok`
+// field so they stay out of the console; saves include ok + message.
+const keyStatusDesc=document.getElementById('keyStatusDesc');
+const hwidValue=document.getElementById('hwidValue');
+const keyInput=document.getElementById('keyInput');
+const keyMsg=document.getElementById('keyMsg');
+function requestKeyState(){webviewPost('get-key-state');}
+document.getElementById('keyRefreshBtn').addEventListener('click',requestKeyState);
+document.querySelector('.settings-nav-item[data-pane="key"]').addEventListener('click',requestKeyState);
+document.getElementById('saveKeyBtn').addEventListener('click',()=>{
+  const v=keyInput.value.trim();
+  if(!v){keyMsg.textContent='Paste a key first.';return;}
+  keyMsg.textContent='Checking…';
+  webviewPost('save-key',{key:v});
+});
+document.getElementById('copyHwidBtn').addEventListener('click',async()=>{
+  const t=hwidValue.textContent||'';
+  try{await navigator.clipboard.writeText(t);}catch(e){
+    const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);
+    ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();
+  }
+});
+if(hasWebView2()){
+  window.chrome.webview.addEventListener('message',(evt)=>{
+    let data;
+    try{data=typeof evt.data==='string'?JSON.parse(evt.data):evt.data;}catch(e){return;}
+    if(!data||data.action!=='key-state')return;
+    if(data.hwid)hwidValue.textContent=data.hwid;
+    if(data.installed&&data.valid){
+      let when='';
+      try{const d=new Date(data.expires_at);if(!isNaN(d))when=' · valid until '+d.toLocaleString();}catch(e){}
+      keyStatusDesc.textContent='Active ('+(data.key||'key')+')'+when;
+    }else if(data.installed){
+      keyStatusDesc.textContent='Installed but invalid.';
+    }else{
+      keyStatusDesc.textContent='No key installed.';
+    }
+    if(data.message)keyMsg.textContent=data.message;
+  });
+}else{
+  keyStatusDesc.textContent='Key status needs the desktop app.';
+  hwidValue.textContent='Unavailable in browser.';
+}
 
 // ── END CLIENTS TAB ──────────────────────────────────────────────────────────
 
