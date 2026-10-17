@@ -558,6 +558,31 @@
   .cmdk-item:hover,.cmdk-item.active{background:rgba(168,85,247,0.09);}
   .cmdk-empty{padding:16px 10px;color:var(--text-faint);font-size:13px;font-style:italic;text-align:center;}
 
+  .keygate-overlay{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(900px 600px at 20% 0%,rgba(139,92,246,0.10),transparent 55%),rgba(4,3,10,0.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+  .keygate-overlay[hidden]{display:none;}
+  .keygate-card{width:420px;max-width:100%;background:var(--win);border:1px solid var(--border-strong);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,0.65),0 0 30px rgba(139,92,246,0.08);padding:26px 24px;}
+  .keygate-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--accent-dim);color:var(--accent);margin-bottom:16px;}
+  .keygate-icon svg{width:22px;height:22px;}
+  .keygate-title{font-size:19px;font-weight:600;letter-spacing:-0.01em;margin-bottom:6px;}
+  .keygate-desc{font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:18px;}
+  .keygate-hwid{display:flex;align-items:center;gap:8px;background:var(--editor);border:1px solid var(--border);border-radius:9px;padding:9px 11px;margin-bottom:12px;}
+  .keygate-hwid-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);flex-shrink:0;}
+  .keygate-hwid-val{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .keygate-input{width:100%;background:var(--editor);border:1px solid var(--border-strong);border-radius:9px;padding:12px 13px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.03em;outline:none;transition:border-color .15s ease;margin-bottom:12px;}
+  .keygate-input:focus{border-color:var(--accent);}
+  .keygate-input::placeholder{color:var(--text-faint);}
+  .keygate-actions{display:flex;gap:10px;}
+  .keygate-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;padding:12px 16px;font-size:13px;font-weight:600;font-family:var(--ui-font);cursor:pointer;border:1px solid transparent;transition:background .15s ease,opacity .15s ease;}
+  .keygate-btn svg{width:15px;height:15px;}
+  .keygate-btn.primary{background:var(--accent);color:var(--accent-fg);}
+  .keygate-btn.primary:hover:not(:disabled){opacity:.9;}
+  .keygate-btn.primary:disabled{opacity:.5;cursor:not-allowed;}
+  .keygate-btn.ghost{background:transparent;border-color:var(--border-strong);color:var(--text);}
+  .keygate-btn.ghost:hover{background:rgba(168,85,247,0.09);}
+  .keygate-msg{font-size:12.5px;margin-top:12px;min-height:16px;color:var(--text-dim);}
+  .keygate-msg.ok{color:var(--ok);}
+  .keygate-msg.err{color:var(--err);}
+
   @media (max-width:760px){.toolbar{flex-wrap:wrap;gap:8px;}}
 </style>
 </head>
@@ -857,6 +882,21 @@
     <div class="cmdk-panel">
       <div class="cmdk-input-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" id="cmdkInput" placeholder="Type a command or search open scripts…" autocomplete="off" spellcheck="false"></div>
       <div class="cmdk-list" id="cmdkList"></div>
+    </div>
+  </div>
+
+  <div class="keygate-overlay" id="keygateOverlay" hidden>
+    <div class="keygate-card">
+      <div class="keygate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 10-10"/><path d="m15 8 3 3"/></svg></div>
+      <div class="keygate-title">Activate OblivionX</div>
+      <div class="keygate-desc">Paste your key to unlock the executor. Need one? Grab it from the key page — it locks to this machine (HWID).</div>
+      <div class="keygate-hwid"><span class="keygate-hwid-label">HWID</span><span class="keygate-hwid-val" id="keygateHwid">…</span><button class="mini-btn" id="keygateCopyHwid">Copy</button></div>
+      <input class="keygate-input" id="keygateInput" placeholder="OBX-XXXXXX-XXXXXX" autocomplete="off" spellcheck="false">
+      <div class="keygate-actions">
+        <button class="keygate-btn ghost" id="keygateGetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>Get a key</button>
+        <button class="keygate-btn primary" id="keygateSaveBtn">Activate</button>
+      </div>
+      <div class="keygate-msg" id="keygateMsg"></div>
     </div>
   </div>
 </div>
@@ -1355,11 +1395,25 @@ btnRefreshClients.addEventListener('click', refreshClients);
 // Replies arrive as { action: 'key-state', installed, valid, expires_at,
 // key (masked), hwid, message }. Routine state replies carry no `ok`
 // field so they stay out of the console; saves include ok + message.
+const KEY_PAGE_URL='https://oblivionrblox.netlify.app/get-key.html';
 const keyStatusDesc=document.getElementById('keyStatusDesc');
 const hwidValue=document.getElementById('hwidValue');
 const keyInput=document.getElementById('keyInput');
 const keyMsg=document.getElementById('keyMsg');
+const keygateOverlay=document.getElementById('keygateOverlay');
+const keygateHwid=document.getElementById('keygateHwid');
+const keygateInput=document.getElementById('keygateInput');
+const keygateMsg=document.getElementById('keygateMsg');
+const keygateSaveBtn=document.getElementById('keygateSaveBtn');
 function requestKeyState(){webviewPost('get-key-state');}
+function setKeygateMsg(text,kind){keygateMsg.textContent=text||'';keygateMsg.className='keygate-msg'+(kind?' '+kind:'');}
+function showKeygate(msg,kind){keygateOverlay.hidden=false;setKeygateMsg(msg,kind);}
+function hideKeygate(){keygateOverlay.hidden=true;setKeygateMsg('');}
+function copyText(t){
+  try{return navigator.clipboard.writeText(t);}catch(e){
+    return new Promise((res)=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();res();});
+  }
+}
 document.getElementById('keyRefreshBtn').addEventListener('click',requestKeyState);
 document.querySelector('.settings-nav-item[data-pane="key"]').addEventListener('click',requestKeyState);
 document.getElementById('saveKeyBtn').addEventListener('click',()=>{
@@ -1368,30 +1422,43 @@ document.getElementById('saveKeyBtn').addEventListener('click',()=>{
   keyMsg.textContent='Checking…';
   webviewPost('save-key',{key:v});
 });
-document.getElementById('copyHwidBtn').addEventListener('click',async()=>{
-  const t=hwidValue.textContent||'';
-  try{await navigator.clipboard.writeText(t);}catch(e){
-    const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);
-    ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();
-  }
-});
+document.getElementById('copyHwidBtn').addEventListener('click',()=>copyText(hwidValue.textContent||''));
+document.getElementById('keygateCopyHwid').addEventListener('click',()=>copyText(keygateHwid.textContent||''));
+document.getElementById('keygateGetBtn').addEventListener('click',()=>webviewPost('open-url',{url:KEY_PAGE_URL}));
+function submitKeygate(){
+  const v=keygateInput.value.trim();
+  if(!v){setKeygateMsg('Paste a key first.','err');return;}
+  setKeygateMsg('Checking…');
+  keygateSaveBtn.disabled=true;
+  webviewPost('save-key',{key:v});
+}
+keygateSaveBtn.addEventListener('click',submitKeygate);
+keygateInput.addEventListener('keydown',(e)=>{if(e.key==='Enter')submitKeygate();});
 if(hasWebView2()){
+  // The gate shows on every launch unless a live key is confirmed. We wait
+  // briefly for the first reply so an active key never flashes the gate,
+  // then fall back to showing it if the check is slow.
+  let keygateAnswered=false;
+  const keygateTimer=setTimeout(()=>{if(!keygateAnswered)showKeygate('Checking your key…','');},1500);
   window.chrome.webview.addEventListener('message',(evt)=>{
     let data;
     try{data=typeof evt.data==='string'?JSON.parse(evt.data):evt.data;}catch(e){return;}
     if(!data||data.action!=='key-state')return;
-    if(data.hwid)hwidValue.textContent=data.hwid;
+    keygateAnswered=true;clearTimeout(keygateTimer);
+    if(data.hwid){hwidValue.textContent=data.hwid;keygateHwid.textContent=data.hwid;}
     if(data.installed&&data.valid){
       let when='';
       try{const d=new Date(data.expires_at);if(!isNaN(d))when=' · valid until '+d.toLocaleString();}catch(e){}
       keyStatusDesc.textContent='Active ('+(data.key||'key')+')'+when;
-    }else if(data.installed){
-      keyStatusDesc.textContent='Installed but invalid.';
+      hideKeygate();
     }else{
-      keyStatusDesc.textContent='No key installed.';
+      keyStatusDesc.textContent=data.installed?'Installed but invalid.':'No key installed.';
+      showKeygate(data.message||(data.installed?'That key is not valid.':'Paste a key to unlock the executor.'),data.installed?'err':'');
     }
     if(data.message)keyMsg.textContent=data.message;
+    keygateSaveBtn.disabled=false;
   });
+  requestKeyState();
 }else{
   keyStatusDesc.textContent='Key status needs the desktop app.';
   hwidValue.textContent='Unavailable in browser.';
