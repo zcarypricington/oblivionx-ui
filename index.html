@@ -584,10 +584,35 @@
   .keygate-msg.err{color:var(--err);}
 
   @media (max-width:760px){.toolbar{flex-wrap:wrap;gap:8px;}}
+
+  #startupLoader{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#05040b;opacity:1;visibility:visible;transition:opacity .65s ease,visibility .65s ease}
+  #startupLoader.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+  #startupLoader video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.58) saturate(.9)}
+  #startupLoader::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,4,12,.55),rgba(12,5,25,.48)),radial-gradient(ellipse at center,transparent 0%,rgba(3,2,8,.58) 100%)}
+  .startup-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:17px;padding:28px;text-align:center}
+  .startup-mark{width:62px;height:62px;object-fit:contain;filter:drop-shadow(0 0 24px rgba(168,85,247,.55));animation:startupFloat 2.4s ease-in-out infinite}
+  .startup-name{font-family:'Chillax','Outfit',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:600;letter-spacing:.13em;color:#f4edff;text-shadow:0 0 28px rgba(168,85,247,.35)}
+  .startup-status{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(230,215,255,.76)}
+  .startup-track{width:190px;height:3px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.15);box-shadow:0 0 18px rgba(168,85,247,.14)}
+  .startup-progress{width:38%;height:100%;border-radius:99px;background:linear-gradient(90deg,#8b5cf6,#e9d5ff);box-shadow:0 0 12px rgba(168,85,247,.9);animation:startupProgress 1.45s ease-in-out infinite}
+  @keyframes startupProgress{0%{transform:translateX(-110%)}100%{transform:translateX(370%)}}
+  @keyframes startupFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @media(prefers-reduced-motion:reduce){.startup-mark,.startup-progress{animation:none}}
 </style>
 </head>
 <body>
 
+<div id="startupLoader" role="status" aria-label="Loading OblivionX">
+  <video id="startupVideo" autoplay muted loop playsinline preload="auto">
+    <source src="./bootstrap-bg.mp4" type="video/mp4">
+  </video>
+  <div class="startup-content">
+    <img class="startup-mark" src="./icon.png" alt="">
+    <div class="startup-name">OBLIVIONX</div>
+    <div class="startup-status" id="startupStatus">Initializing interface</div>
+    <div class="startup-track"><div class="startup-progress"></div></div>
+  </div>
+</div>
 <canvas id="starCanvas"></canvas>
 <div class="window">
 
@@ -1188,6 +1213,12 @@
     await sessionReady;renderTabs();
     const initialEditorFontSize=getEditorFontSize();
     editor=monaco.editor.create(document.getElementById('monacoContainer'),{model:getModel(tabs.find(t=>t.id===activeId)),theme:'executorTheme',fontFamily:getEditorFontFamily(),fontLigatures:getEditorBoolPref('oblivionxUiEditorLigatures'),fontSize:initialEditorFontSize,lineHeight:computeEditorLineHeight(initialEditorFontSize),cursorBlinking:getEditorStringPref('oblivionxUiEditorCursorBlink','blink'),cursorStyle:getEditorStringPref('oblivionxUiEditorCursorStyle','line'),cursorSmoothCaretAnimation:getEditorBoolPref('oblivionxUiEditorSmoothTyping')?'on':'off',smoothScrolling:getEditorBoolPref('oblivionxUiEditorSmoothScroll'),wordWrap:getEditorBoolPref('oblivionxUiEditorWordWrap')?'on':'off',minimap:{enabled:getEditorBoolPref('oblivionxUiEditorMinimap')},stickyScroll:{enabled:getEditorBoolPref('oblivionxUiEditorStickyScroll')},tabSize:getEditorTabSize(),autoClosingBrackets:getEditorAutoClosing()?'languageDefined':'never',autoClosingQuotes:getEditorAutoClosing()?'languageDefined':'never',lineNumbers:getEditorStringPref('oblivionxUiEditorLineNumbers','on'),renderLineHighlight:'line',scrollBeyondLastLine:false,folding:false,bracketPairColorization:{enabled:false},guides:{bracketPairs:false,bracketPairsHorizontal:false,indentation:true},matchBrackets:'never',automaticLayout:true,padding:{top:12},overviewRulerBorder:false,hideCursorInOverviewRuler:true,scrollbar:{verticalScrollbarSize:8,horizontalScrollbarSize:8}});
+    const startupLoader=document.getElementById('startupLoader');
+    const startupStatus=document.getElementById('startupStatus');
+    if(startupStatus)startupStatus.textContent='Preparing workspace';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>startupLoader?.classList.add('is-hidden'),450)));
+    setTimeout(()=>startupLoader?.classList.add('is-hidden'),12000);
+
     let saveDebounce;editor.onDidChangeModelContent(()=>{updateDirtyIndicator();clearTimeout(saveDebounce);saveDebounce=setTimeout(saveState,400);});
     if(document.fonts&&document.fonts.ready){document.fonts.load(initialEditorFontSize+'px '+getEditorFontFamily()).catch(()=>{});document.fonts.ready.then(()=>{monaco.editor.remeasureFonts();try{editor.layout();}catch(e){}});}
     editorLoading.remove();
