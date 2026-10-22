@@ -602,9 +602,9 @@
 </style>
 
 <style id="homeSidebarStyles">
-.titlebar{flex-shrink:0}.brand{min-width:0}.key-countdown{font-size:12px;color:var(--text-dim);font-variant-numeric:tabular-nums;white-space:nowrap}.key-countdown.expired{color:var(--err)}.key-signin-btn{font:inherit;font-size:11px;font-weight:600;line-height:1;color:#fff;background:linear-gradient(135deg,#5865f2,#4752c4);border:0;border-radius:6px;padding:5px 10px;margin-left:8px;cursor:pointer;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;transition:filter .15s,background .15s}.key-signin-btn:hover{filter:brightness(1.12)}.key-signin-btn.signed{background:rgba(255,255,255,.07);color:var(--text-dim);font-weight:500}.key-signin-btn.signed:hover{background:rgba(255,255,255,.14);color:#fff;filter:none}
+.titlebar{flex-shrink:0}.brand{min-width:0}.key-countdown{font-size:12px;color:var(--text-dim);font-variant-numeric:tabular-nums;white-space:nowrap}.key-countdown.expired{color:var(--err)}.key-signin-btn{font:inherit;font-size:11px;font-weight:600;line-height:1;color:#fff;background:linear-gradient(135deg,#5865f2,#4752c4);border:0;border-radius:6px;padding:5px 10px;margin-left:8px;cursor:pointer;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;transition:filter .15s,background .15s;display:inline-flex;align-items:center;gap:5px}.key-signin-btn img{width:16px;height:16px;border-radius:50%;object-fit:cover;display:block}.key-signin-btn:hover{filter:brightness(1.12)}.key-signin-btn.signed{background:rgba(255,255,255,.07);color:var(--text-dim);font-weight:500}.key-signin-btn.signed:hover{background:rgba(255,255,255,.14);color:#fff;filter:none}
 .app-shell{display:flex;flex:1;min-height:0}.app-sidebar{width:56px;flex-shrink:0;background:var(--titlebar);border-right:1px solid var(--border);display:flex;align-items:center;flex-direction:column;gap:10px;padding:12px 6px}.app-sidebar .icon-btn{width:38px;height:38px;flex-shrink:0}.page-host{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-.home-page{flex:1;min-height:0;overflow:auto;padding:28px;position:relative;background:radial-gradient(ellipse at 90% 10%,var(--accent-dim),transparent 65%),var(--win)}.home-page[hidden]{display:none}.home-welcome{display:flex;gap:16px;align-items:center;margin-bottom:34px}.home-avatar{width:58px;height:58px;border-radius:16px;background:var(--accent-dim);color:var(--accent);display:grid;place-items:center;font-size:24px;font-weight:600;flex-shrink:0}.home-greeting{font-size:clamp(18px,3vw,26px);font-weight:600;overflow-wrap:anywhere}.home-time{font-size:14px;color:var(--text-dim);margin-top:5px}.home-updates{max-width:880px}.home-section-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}.home-section-head h2{font-size:15px;font-weight:600}.home-section-head button{margin-left:auto}.release-card{border:1px solid var(--border-strong);border-radius:14px;background:var(--editor);padding:22px}.release-card h3{font-size:18px;margin-bottom:8px}.release-meta{font-size:12px;color:var(--text-dim);margin-bottom:18px}.release-notes{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--ui-font);font-size:13px;line-height:1.8}.home-status{color:var(--text-dim);font-size:13px;margin-bottom:12px}.home-release-link{margin-top:18px;color:var(--accent);border:0;background:none;cursor:pointer;font:inherit;font-size:12px}.app-sidebar [data-tip]::after,.app-sidebar [data-tip]::before{display:none}
+.home-page{flex:1;min-height:0;overflow:auto;padding:28px;position:relative;background:radial-gradient(ellipse at 90% 10%,var(--accent-dim),transparent 65%),var(--win)}.home-page[hidden]{display:none}.home-welcome{display:flex;gap:16px;align-items:center;margin-bottom:34px}.home-avatar{width:58px;height:58px;border-radius:16px;background:var(--accent-dim);color:var(--accent);display:grid;place-items:center;font-size:24px;font-weight:600;flex-shrink:0;overflow:hidden}.home-avatar img{width:100%;height:100%;object-fit:cover;display:block}.home-greeting{font-size:clamp(18px,3vw,26px);font-weight:600;overflow-wrap:anywhere}.home-time{font-size:14px;color:var(--text-dim);margin-top:5px}.home-updates{max-width:880px}.home-section-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}.home-section-head h2{font-size:15px;font-weight:600}.home-section-head button{margin-left:auto}.release-card{border:1px solid var(--border-strong);border-radius:14px;background:var(--editor);padding:22px}.release-card h3{font-size:18px;margin-bottom:8px}.release-meta{font-size:12px;color:var(--text-dim);margin-bottom:18px}.release-notes{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--ui-font);font-size:13px;line-height:1.8}.home-status{color:var(--text-dim);font-size:13px;margin-bottom:12px}.home-release-link{margin-top:18px;color:var(--accent);border:0;background:none;cursor:pointer;font:inherit;font-size:12px}.app-sidebar [data-tip]::after,.app-sidebar [data-tip]::before{display:none}
 @media(max-width:520px){.home-page{padding:18px}.release-card{padding:16px}.key-countdown{font-size:10px}}
 </style>
 </head>
@@ -628,7 +628,7 @@
 <img alt="" src="icon.png"/>
 </div>
 <span class="brand-version" hidden="" id="brandVersion">v14.0</span>
-<span class="key-countdown" id="keyCountdown">Key status unavailable</span><button class="key-signin-btn" id="topSignInBtn" type="button" title="Sign in with Discord">Sign in</button></div>
+<span class="key-countdown" id="keyCountdown">Key status unavailable</span><button class="key-signin-btn" id="topSignInBtn" type="button" title="Sign in with Discord"><img alt="" hidden id="topSignInAvatar"/>Sign in</button></div>
 <div class="title-actions">
 
 
@@ -1544,16 +1544,23 @@ function acctAvatar(u) {
 function acctHomeUser(u) {
   try {
     if (window.ObxHome && window.ObxHome.setAccount) {
-      window.ObxHome.setAccount((u && (u.global_name || u.username)) || '');
+      window.ObxHome.setAccount((u && (u.global_name || u.username)) || '', acctAvatar(u));
     }
   } catch (e) {}
 }
 
-function updateTopSignIn(signed, name) {
+function updateTopSignIn(signed, name, avatar) {
   const btn = document.getElementById('topSignInBtn');
   if (!btn) return;
   btn.classList.toggle('signed', !!signed);
-  btn.textContent = signed ? (name || 'Account') : 'Sign in';
+  const img = document.getElementById('topSignInAvatar');
+  if (img) {
+    if (signed && avatar) { img.src = avatar; img.hidden = false; }
+    else { img.removeAttribute('src'); img.hidden = true; }
+  }
+  const label = signed ? (name || 'Account') : 'Sign in';
+  if (btn.lastChild && btn.lastChild.nodeType === 3) btn.lastChild.nodeValue = label;
+  else btn.appendChild(document.createTextNode(label));
   btn.title = signed ? 'Manage Discord account' : 'Sign in with Discord';
 }
 
@@ -1568,7 +1575,7 @@ function renderAccount(user, key) {
     return;
   }
   const name = user.global_name || user.username || 'Discord user';
-  updateTopSignIn(true, name);
+  updateTopSignIn(true, name, acctAvatar(user));
   acctDesc.textContent = 'Signed in as ' + name + (user.username ? ' (@' + user.username + ')' : '');
   acctSignInBtn.style.display = 'none';
   acctGetKeyBtn.style.display = '';
@@ -1720,7 +1727,7 @@ keygateLinkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') key
 <script id="homeDashboardScript">
 (()=>{
 const $=id=>document.getElementById(id);
-let username='', keyState=null, refreshBusy=false;
+let username='', avatar='', keyState=null, refreshBusy=false;
 const releaseUrl='https://github.com/OblivionXDevelopmentinc/obx-install/releases';
 function timestamp(value){
  if(typeof value==='number')return value<1e12?value*1000:value;
@@ -1731,7 +1738,6 @@ function tick(){
  const now=new Date(), hour=now.getHours();
  const greeting=hour<12?'Good morning':hour<18?'Good afternoon':'Good evening';
  $('homeGreeting').textContent=greeting+(username?', '+username+'!':'!');
- $('homeAvatar').textContent=username?Array.from(username)[0].toUpperCase():'?';
  $('homeTime').textContent="It's currently: "+now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
  const chip=$('keyCountdown');chip.classList.remove('expired');
  if(!keyState){chip.textContent='Key status unavailable';return;}
@@ -1745,15 +1751,27 @@ function tick(){
  chip.textContent='Key · '+(days?days+'d ':'')+[hours,minutes,seconds].map(v=>String(v).padStart(2,'0')).join(':')+' left';
  chip.title='Expires '+new Date(expiry).toLocaleString();
 }
+function renderHomeAccount(){
+ const av=$('homeAvatar');
+ if(avatar){
+  av.innerHTML='<img alt="" src="'+avatar.replace(/"/g,'')+'"/>';
+ }else{
+  av.textContent=username?Array.from(username)[0].toUpperCase():'?';
+ }
+}
 function receive(data){
  if(!data||typeof data!=='object')return;
- if(data.action==='account-state')username=typeof data.username==='string'?data.username:'';
+ if(data.action==='account-state'){
+  username=typeof data.username==='string'?data.username:'';
+  avatar=typeof data.avatar==='string'?data.avatar:'';
+  renderHomeAccount();
+ }
  if(data.action==='key-state')keyState=data;
  tick();
 }
 const bridge=window.chrome?.webview;
 if(bridge){bridge.addEventListener('message',event=>{try{receive(typeof event.data==='string'?JSON.parse(event.data):event.data);}catch{}});}
-window.ObxHome={setAccount:username=>receive({action:'account-state',username}),setKeyState:state=>receive({...state,action:'key-state'})};
+window.ObxHome={setAccount:(username,avatar)=>receive({action:'account-state',username,avatar}),setKeyState:state=>receive({...state,action:'key-state'})};
 function requestState(){if(bridge){bridge.postMessage({action:'get-account-state'});bridge.postMessage({action:'get-key-state'});}}
 function renderRelease(release,cached=false){
  $('homeReleaseCard').hidden=false;
