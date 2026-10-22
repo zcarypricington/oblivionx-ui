@@ -849,6 +849,8 @@
 <div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="10" x2="21" y1="6" y2="6"></line><line x1="10" x2="21" y1="12" y2="12"></line><line x1="10" x2="21" y1="18" y2="18"></line><path d="M4 6h1v4"></path><path d="M4 10h2"></path><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Line Numbers</div><div class="settings-card-desc">How line numbers are shown in the editor gutter.</div></div><div class="settings-card-control"><div class="dropdown" id="editorLineNumbersDropdown"><button aria-expanded="false" class="settings-select-trigger dropdown-trigger" id="editorLineNumbersTrigger"><span class="settings-select-value" id="editorLineNumbersValue">On</span><svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><div class="dropdown-panel dropdown-panel-sm" id="editorLineNumbersPanel"><div aria-selected="true" class="dropdown-row dropdown-row-option" data-value="on"><div class="dropdown-row-title">On</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="relative"><div class="dropdown-row-title">Relative</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="off"><div class="dropdown-row-title">Off</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div></div></div></div></div>
 </div>
 <div class="settings-pane" data-pane="key" hidden="">
+<div class="settings-card" id="acctCard"><div class="settings-card-icon" id="acctIcon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5c1.7.4 2.5 1 2.5 1a13.3 13.3 0 0 0-11.4 0s.8-.6 2.5-1L8.6 3a19.8 19.8 0 0 0-4.9 1.4C1.1 9.1.3 13.7.7 18.2a19.9 19.9 0 0 0 6 3l.6-.9c-1-.4-2-.9-2.9-1.5l.2-.1a14.2 14.2 0 0 0 12.2 0l.2.1c-.9.6-1.9 1.1-2.9 1.5l.6.9a19.9 19.9 0 0 0 6-3c.5-5.2-.8-9.8-3.4-13.8ZM8.5 15.5c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4Z"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Discord Account</div><div class="settings-card-desc" id="acctDesc">Not signed in. Sign in to pull your active key automatically.</div><div class="settings-card-desc" id="acctKeyDesc" style="display:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;"></div></div><div class="settings-card-control"><button class="mini-btn" id="acctSignInBtn">Sign in</button><button class="mini-btn" id="acctGetKeyBtn" style="display:none;">Get key</button><button class="mini-btn" id="acctSignOutBtn" style="display:none;">Sign out</button></div></div>
+<div class="settings-card" id="acctCodeCard" style="display:none;"><div class="settings-card-text" style="flex:1;"><div class="settings-card-desc" id="acctCodeHint">A browser tab opened. Enter the 8-character code it shows.</div><div class="settings-card-desc" id="acctCodeMsg"></div></div><div class="settings-card-control"><input autocomplete="off" class="console-filter-input" id="acctCodeInput" placeholder="XXXX-XXXX" spellcheck="false" style="flex:1;min-width:110px;"/><button class="mini-btn" id="acctLinkBtn">Link</button></div></div>
 <div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"></circle><path d="m11 12 10-10"></path><path d="m15 8 3 3"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Key Status</div><div class="settings-card-desc" id="keyStatusDesc">Checking…</div></div><div class="settings-card-control"><button class="mini-btn" id="keyRefreshBtn">Refresh</button></div></div>
 <div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="10" rx="2" width="18" x="3" y="11"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">HWID</div><div class="settings-card-desc" id="hwidValue" style="font-family:'JetBrains Mono',monospace;">…</div></div><div class="settings-card-control"><button class="mini-btn" id="copyHwidBtn">Copy</button></div></div>
 <div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16"></path><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Enter Key</div><div class="settings-card-desc">Paste a key from the Get Key page, then Save.</div><div class="settings-card-desc" id="keyMsg"></div></div><div class="settings-card-control"><input autocomplete="off" class="console-filter-input" id="keyInput" placeholder="OBX-XXXXXX-XXXXXX" spellcheck="false" style="flex:1;min-width:120px;"/><button class="mini-btn" id="saveKeyBtn">Save</button></div></div>
@@ -908,7 +910,9 @@
 <div class="keygate-card">
 <div class="keygate-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"></circle><path d="m11 12 10-10"></path><path d="m15 8 3 3"></path></svg></div>
 <div class="keygate-title">Activate OblivionX</div>
-<div class="keygate-desc">Paste your key to unlock the executor. Need one? Grab it from the key page — it locks to this machine (HWID).</div>
+<div class="keygate-desc">Sign in with Discord to pull your active key automatically, or paste a key. Keys lock to this machine (HWID).</div>
+<button class="keygate-btn ghost" id="keygateDiscordBtn" style="width:100%;margin-bottom:12px;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5c1.7.4 2.5 1 2.5 1a13.3 13.3 0 0 0-11.4 0s.8-.6 2.5-1L8.6 3a19.8 19.8 0 0 0-4.9 1.4C1.1 9.1.3 13.7.7 18.2a19.9 19.9 0 0 0 6 3l.6-.9c-1-.4-2-.9-2.9-1.5l.2-.1a14.2 14.2 0 0 0 12.2 0l.2.1c-.9.6-1.9 1.1-2.9 1.5l.6.9a19.9 19.9 0 0 0 6-3c.5-5.2-.8-9.8-3.4-13.8ZM8.5 15.5c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4Z"/></svg>Sign in with Discord</button>
+<div id="keygateLinkBox" style="display:none;margin-bottom:12px;"><input autocomplete="off" class="keygate-input" id="keygateLinkInput" placeholder="Code from browser (XXXX-XXXX)" spellcheck="false" style="margin-bottom:10px;"/><button class="keygate-btn primary" id="keygateLinkBtn" style="width:100%;">Link &amp; activate</button></div>
 <div class="keygate-hwid"><span class="keygate-hwid-label">HWID</span><span class="keygate-hwid-val" id="keygateHwid">…</span><button class="mini-btn" id="keygateCopyHwid">Copy</button></div>
 <input autocomplete="off" class="keygate-input" id="keygateInput" placeholder="OBX-XXXXXX-XXXXXX" spellcheck="false"/>
 <div class="keygate-actions">
@@ -1419,7 +1423,7 @@ btnRefreshClients.addEventListener('click', refreshClients);
 // Replies arrive as { action: 'key-state', installed, valid, expires_at,
 // key (masked), hwid, message }. Routine state replies carry no `ok`
 // field so they stay out of the console; saves include ok + message.
-const KEY_PAGE_URL='https://oblivionrblox.netlify.app/get-key.html';
+const KEY_PAGE_URL='https://obx-keysys.onrender.com/get-key';
 const keyStatusDesc=document.getElementById('keyStatusDesc');
 const hwidValue=document.getElementById('hwidValue');
 const keyInput=document.getElementById('keyInput');
@@ -1487,6 +1491,184 @@ if(hasWebView2()){
   keyStatusDesc.textContent='Key status needs the desktop app.';
   hwidValue.textContent='Unavailable in browser.';
 }
+
+// ── DISCORD ACCOUNT LINK ─────────────────────────────────────────────
+// The UI is cross-origin from the key API, so it can't use the browser
+// session cookie. Instead: open the device flow in the system browser, get
+// a short one-time code, redeem it here for a bearer token, then show the
+// account and its active key.
+const ACCT_API = 'https://obx-keysys.onrender.com';
+const ACCT_TOKEN_KEY = 'obx_acct_token';
+const ACCT_DEVICE_URL = ACCT_API + '/api/auth/discord/device';
+const acctDesc = document.getElementById('acctDesc');
+const acctKeyDesc = document.getElementById('acctKeyDesc');
+const acctSignInBtn = document.getElementById('acctSignInBtn');
+const acctGetKeyBtn = document.getElementById('acctGetKeyBtn');
+const acctSignOutBtn = document.getElementById('acctSignOutBtn');
+const acctCodeCard = document.getElementById('acctCodeCard');
+const acctCodeInput = document.getElementById('acctCodeInput');
+const acctCodeMsg = document.getElementById('acctCodeMsg');
+
+function acctToken() { try { return localStorage.getItem(ACCT_TOKEN_KEY) || ''; } catch (e) { return ''; } }
+function setAcctToken(t) { try { if (t) localStorage.setItem(ACCT_TOKEN_KEY, t); else localStorage.removeItem(ACCT_TOKEN_KEY); } catch (e) {} }
+function acctOpen(url) { if (hasWebView2()) webviewPost('open-url', { url }); else window.open(url, '_blank', 'noopener'); }
+function acctDate(iso) { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleString(); }
+
+async function acctApi(path, opts) {
+  const tok = acctToken();
+  const o = Object.assign({}, opts || {});
+  o.headers = Object.assign({ 'Content-Type': 'application/json' }, o.headers || {}, tok ? { Authorization: 'Bearer ' + tok } : {});
+  const res = await fetch(ACCT_API + path, o);
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) setAcctToken('');
+  return { ok: res.ok, status: res.status, data };
+}
+
+function acctAvatar(u) {
+  return (u && u.discord_id && u.avatar)
+    ? 'https://cdn.discordapp.com/avatars/' + u.discord_id + '/' + u.avatar + '.png?size=64'
+    : '';
+}
+
+function acctHomeUser(u) {
+  try {
+    if (window.ObxHome && window.ObxHome.setAccount) {
+      window.ObxHome.setAccount((u && (u.global_name || u.username)) || '');
+    }
+  } catch (e) {}
+}
+
+function renderAccount(user, key) {
+  if (!user) {
+    acctDesc.textContent = 'Not signed in. Sign in to pull your active key automatically.';
+    acctKeyDesc.style.display = 'none';
+    acctSignInBtn.style.display = '';
+    acctGetKeyBtn.style.display = 'none';
+    acctSignOutBtn.style.display = 'none';
+    return;
+  }
+  const name = user.global_name || user.username || 'Discord user';
+  acctDesc.textContent = 'Signed in as ' + name + (user.username ? ' (@' + user.username + ')' : '');
+  acctSignInBtn.style.display = 'none';
+  acctGetKeyBtn.style.display = '';
+  acctSignOutBtn.style.display = '';
+  const av = acctAvatar(user);
+  const icon = document.getElementById('acctIcon');
+  if (icon && av) icon.innerHTML = '<img alt="" src="' + av + '" style="width:22px;height:22px;border-radius:50%;"/>';
+  if (key && key.key) {
+    acctKeyDesc.style.display = '';
+    acctKeyDesc.textContent = 'Active key: ' + key.key + (key.expires_at ? ' · expires ' + acctDate(key.expires_at) : '');
+    const ki = document.getElementById('keyInput');
+    if (ki && !ki.value) ki.value = key.key;
+  } else {
+    acctKeyDesc.style.display = '';
+    acctKeyDesc.textContent = 'No active key on this account yet.';
+  }
+}
+
+async function refreshAccount() {
+  if (!acctToken()) { renderAccount(null); return; }
+  try {
+    const r = await acctApi('/api/account/summary', { method: 'GET' });
+    if (r.status === 401) { renderAccount(null); return; }
+    if (!r.ok) return;
+    renderAccount(r.data.user, r.data.key);
+    acctHomeUser(r.data.user);
+  } catch (e) {}
+}
+
+async function redeemCode(code, onDone) {
+  const clean = String(code || '').trim();
+  if (clean.replace(/[^A-Za-z0-9]/g, '').length !== 8) {
+    acctCodeMsg.textContent = 'Enter the full 8-character code.';
+    return;
+  }
+  acctCodeMsg.textContent = 'Linking…';
+  try {
+    const r = await acctApi('/api/auth/device/redeem', { method: 'POST', body: JSON.stringify({ code: clean }) });
+    if (!r.ok) {
+      const map = {
+        INVALID_CODE: 'That code is not valid.',
+        CODE_USED: 'That code was already used.',
+        CODE_EXPIRED: 'That code expired — sign in again.',
+        BAD_CODE: 'Enter the full 8-character code.',
+        RATE_LIMITED: 'Too many attempts — wait a minute.',
+      };
+      acctCodeMsg.textContent = map[r.data.error] || 'Could not link. Try again.';
+      return;
+    }
+    setAcctToken(r.data.token);
+    acctCodeCard.style.display = 'none';
+    acctCodeMsg.textContent = '';
+    renderAccount(r.data.user, r.data.key);
+    acctHomeUser(r.data.user);
+    if (onDone) onDone(r.data);
+  } catch (e) {
+    acctCodeMsg.textContent = 'Network error. Try again.';
+  }
+}
+
+acctSignInBtn.addEventListener('click', () => { acctOpen(ACCT_DEVICE_URL); acctCodeCard.style.display = ''; acctCodeMsg.textContent = 'Waiting for the browser…'; acctCodeInput.value = ''; try { acctCodeInput.focus(); } catch (e) {} });
+acctGetKeyBtn.addEventListener('click', () => acctOpen(KEY_PAGE_URL));
+acctSignOutBtn.addEventListener('click', () => {
+  try { acctApi('/api/auth/logout', { method: 'POST' }); } catch (e) {}
+  setAcctToken('');
+  renderAccount(null);
+  const ki = document.getElementById('keyInput');
+  if (ki) ki.value = '';
+});
+document.getElementById('acctLinkBtn').addEventListener('click', () => redeemCode(acctCodeInput.value));
+acctCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') redeemCode(acctCodeInput.value); });
+document.querySelector('.settings-nav-item[data-pane="key"]').addEventListener('click', refreshAccount);
+refreshAccount();
+
+// Startup gate: sign in and auto-activate the account's key.
+const keygateDiscordBtn = document.getElementById('keygateDiscordBtn');
+const keygateLinkBox = document.getElementById('keygateLinkBox');
+const keygateLinkInput = document.getElementById('keygateLinkInput');
+
+async function keygateLink() {
+  const raw = keygateLinkInput.value || '';
+  if (raw.replace(/[^A-Za-z0-9]/g, '').length !== 8) { setKeygateMsg('Enter the full 8-character code.', 'err'); return; }
+  setKeygateMsg('Linking…');
+  try {
+    const r = await acctApi('/api/auth/device/redeem', { method: 'POST', body: JSON.stringify({ code: raw }) });
+    if (!r.ok) {
+      const map = {
+        INVALID_CODE: 'That code is not valid.',
+        CODE_USED: 'That code was already used.',
+        CODE_EXPIRED: 'That code expired — sign in again.',
+        BAD_CODE: 'Enter the full 8-character code.',
+        RATE_LIMITED: 'Too many attempts — wait a minute.',
+      };
+      setKeygateMsg(map[r.data.error] || 'Could not link. Try again.', 'err');
+      return;
+    }
+    setAcctToken(r.data.token);
+    renderAccount(r.data.user, r.data.key);
+    acctHomeUser(r.data.user);
+    keygateLinkBox.style.display = 'none';
+    if (r.data.key && r.data.key.key) {
+      keygateInput.value = r.data.key.key;
+      setKeygateMsg('Linked — activating…');
+      submitKeygate();
+    } else {
+      setKeygateMsg('Account linked, but no active key. Get one from the key page.', 'err');
+    }
+  } catch (e) {
+    setKeygateMsg('Network error. Try again.', 'err');
+  }
+}
+
+keygateDiscordBtn.addEventListener('click', () => {
+  acctOpen(ACCT_DEVICE_URL);
+  keygateLinkBox.style.display = '';
+  keygateLinkInput.value = '';
+  setKeygateMsg('A browser tab opened — enter the code it shows.');
+  try { keygateLinkInput.focus(); } catch (e) {}
+});
+document.getElementById('keygateLinkBtn').addEventListener('click', keygateLink);
+keygateLinkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') keygateLink(); });
 
 // ── END CLIENTS TAB ──────────────────────────────────────────────────────────
 
