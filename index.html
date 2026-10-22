@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>OblivionX</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;family=Outfit:wght@400;500;600;700&amp;family=Source+Code+Pro:wght@400;500;600&amp;family=Ubuntu+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
 <style>
   @font-face{font-family:'Chillax';src:url('fonts/chillax-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
   @font-face{font-family:'Chillax';src:url('fonts/chillax-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
@@ -599,333 +600,325 @@
   @keyframes startupFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
   @media(prefers-reduced-motion:reduce){.startup-mark,.startup-progress{animation:none}}
 </style>
+
+<style id="homeSidebarStyles">
+.titlebar{flex-shrink:0}.brand{min-width:0}.key-countdown{font-size:12px;color:var(--text-dim);font-variant-numeric:tabular-nums;white-space:nowrap}.key-countdown.expired{color:var(--err)}
+.app-shell{display:flex;flex:1;min-height:0}.app-sidebar{width:56px;flex-shrink:0;background:var(--titlebar);border-right:1px solid var(--border);display:flex;align-items:center;flex-direction:column;gap:10px;padding:12px 6px}.app-sidebar .icon-btn{width:38px;height:38px;flex-shrink:0}.page-host{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.home-page{flex:1;min-height:0;overflow:auto;padding:28px;position:relative;background:radial-gradient(ellipse at 90% 10%,var(--accent-dim),transparent 65%),var(--win)}.home-page[hidden]{display:none}.home-welcome{display:flex;gap:16px;align-items:center;margin-bottom:34px}.home-avatar{width:58px;height:58px;border-radius:16px;background:var(--accent-dim);color:var(--accent);display:grid;place-items:center;font-size:24px;font-weight:600;flex-shrink:0}.home-greeting{font-size:clamp(18px,3vw,26px);font-weight:600;overflow-wrap:anywhere}.home-time{font-size:14px;color:var(--text-dim);margin-top:5px}.home-updates{max-width:880px}.home-section-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}.home-section-head h2{font-size:15px;font-weight:600}.home-section-head button{margin-left:auto}.release-card{border:1px solid var(--border-strong);border-radius:14px;background:var(--editor);padding:22px}.release-card h3{font-size:18px;margin-bottom:8px}.release-meta{font-size:12px;color:var(--text-dim);margin-bottom:18px}.release-notes{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--ui-font);font-size:13px;line-height:1.8}.home-status{color:var(--text-dim);font-size:13px;margin-bottom:12px}.home-release-link{margin-top:18px;color:var(--accent);border:0;background:none;cursor:pointer;font:inherit;font-size:12px}.app-sidebar [data-tip]::after,.app-sidebar [data-tip]::before{display:none}
+@media(max-width:520px){.home-page{padding:18px}.release-card{padding:16px}.key-countdown{font-size:10px}}
+</style>
 </head>
 <body>
-
-<div id="startupLoader" role="status" aria-label="Loading OblivionX">
-  <video id="startupVideo" autoplay muted loop playsinline preload="auto">
-    <source src="./bootstrap-bg.mp4" type="video/mp4">
-  </video>
-  <div class="startup-content">
-    <img class="startup-mark" src="./icon.png" alt="">
-    <div class="startup-name">OBLIVIONX</div>
-    <div class="startup-status" id="startupStatus">Initializing interface</div>
-    <div class="startup-track"><div class="startup-progress"></div></div>
-  </div>
+<div aria-label="Loading OblivionX" id="startupLoader" role="status">
+<video autoplay="" id="startupVideo" loop="" muted="" playsinline="" preload="auto">
+<source src="./bootstrap-bg.mp4" type="video/mp4"/>
+</video>
+<div class="startup-content">
+<img alt="" class="startup-mark" src="./icon.png"/>
+<div class="startup-name">OBLIVIONX</div>
+<div class="startup-status" id="startupStatus">Initializing interface</div>
+<div class="startup-track"><div class="startup-progress"></div></div>
+</div>
 </div>
 <canvas id="starCanvas"></canvas>
 <div class="window">
+<div class="titlebar">
+<div class="brand">
+<div class="brand-mark">
+<img alt="" src="icon.png"/>
+</div>
+<span class="brand-version" hidden="" id="brandVersion">v14.0</span>
+<span class="key-countdown" id="keyCountdown">Key status unavailable</span></div>
+<div class="title-actions">
 
-  <div class="titlebar">
-    <div class="brand">
-      <div class="brand-mark">
-        <img src="icon.png" alt="">
-      </div>
-      <span class="brand-version" id="brandVersion" hidden>v14.0</span>
-    </div>
-    <div class="title-actions">
-      <button class="icon-btn tip-down active" data-tip="Editor" id="navEditorBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></button>
-      <button class="icon-btn tip-down" data-tip="Script Hub" id="navHubBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></button>
-      <button class="icon-btn tip-down" data-tip="Settings" id="navSettingsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.5a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
-      <button class="icon-btn tip-down" data-tip="Clients" id="navClientsBtn">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="8" cy="7" r="3.5"/><circle cx="16" cy="7" r="3.5"/>
-    <path d="M2 20c0-3.3 2.7-6 6-6h1"/><path d="M22 20c0-3.3-2.7-6-6-6h-1"/>
-    <circle cx="12" cy="17" r="3.5"/>
-  </svg>
-</button>
-      <div class="win-divider"></div>
-      <button class="icon-btn tip-down" data-tip="Minimize" id="winMinimizeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></button>
-      <button class="icon-btn maximize tip-down" data-tip="Maximize" id="winMaximizeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="5" y="5" rx="2"/></svg></button>
-      <button class="icon-btn close tip-down" data-tip="Close" id="winCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-    </div>
-  </div>
 
-  <div class="editor-page" id="editorPage">
-  <div class="tab-toolbar">
-    <div class="tabbar" id="tabbar">
-      <div class="tab-caret-pin">
-        <div class="tab-caret" id="tabCaret">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div class="tab-sep"></div>
-      </div>
-      <div class="tab-scroll" id="tabScroll">
-        <div class="tab-add" id="tabAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div>
-      </div>
-    </div>
 
-    <div class="script-dropdown" id="scriptDropdown">
-      <input type="text" class="script-search" id="scriptSearch" placeholder="Search scripts…">
-      <div class="script-divider"></div>
-      <div class="script-list" id="scriptList"></div>
-    </div>
 
-    <div class="float-tip" id="floatTip"></div>
-
-    <div class="toolbar">
-      <div class="tool-group">
-        <button class="tool-btn primary" id="btnExecute"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6.5 Q7 4 9.08 5.39 L16.92 10.61 Q19 12 16.92 13.39 L9.08 18.61 Q7 20 7 17.5 Z"/></svg>Execute</button>
-        <button class="tool-btn" id="btnClear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>Clear</button>
-        <button class="tool-btn" id="btnOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>Open</button>
-        <button class="tool-btn" id="btnSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>Save</button>
-      </div>
-      <div class="tool-group">
-        <button class="tool-btn" id="btnAttach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Attach</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="editor-wrap">
-    <div id="monacoContainer"></div>
-    <div class="editor-loading" id="editorLoading">Loading editor…</div>
-  </div>
-
-  <div class="console-wrap" id="consoleWrap">
-    <div class="console-label">
-      <div class="console-label-left">
-        <span>Console</span>
-        <span class="console-dot" id="consoleStatus"></span>
-      </div>
-      <div class="console-filter">
-        <svg class="console-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" class="console-filter-input" id="consoleFilterInput" placeholder="Filter…" autocomplete="off" spellcheck="false">
-      </div>
-      <div class="console-actions">
-        <div class="dropdown" id="consoleLevelDropdown">
-          <button class="icon-btn small dropdown-trigger" id="consoleLevelTrigger" data-tip="Log levels" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg></button>
-          <div class="dropdown-panel dropdown-panel-sm" id="consoleLevelPanel">
-            <div class="dropdown-row"><div class="dropdown-row-title dropdown-row-title-icon"><span class="console-level-dot ok"></span>Success logs</div><label class="switch"><input type="checkbox" id="consoleLevelOk" data-level="ok" checked><span class="switch-track"></span></label></div>
-            <div class="dropdown-row"><div class="dropdown-row-title dropdown-row-title-icon"><span class="console-level-dot info"></span>Info logs</div><label class="switch"><input type="checkbox" id="consoleLevelInfo" data-level="info" checked><span class="switch-track"></span></label></div>
-            <div class="dropdown-row"><div class="dropdown-row-title dropdown-row-title-icon"><span class="console-level-dot err"></span>Error logs</div><label class="switch"><input type="checkbox" id="consoleLevelErr" data-level="err" checked><span class="switch-track"></span></label></div>
-          </div>
-        </div>
-        <button class="icon-btn small" id="btnClearConsole" data-tip="Clear console"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>
-        <button class="icon-btn small toggle" id="btnToggleConsole" data-tip="Collapse console"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
-      </div>
-    </div>
-    <div class="console-body" id="consoleBody"></div>
-  </div>
-  </div>
-
-  <div class="hub-page" id="hubPage" hidden>
-    <div class="hub-header">
-      <div class="hub-search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="hubSearchInput" placeholder="Search for; e.g RIVALS, Steal A Brainrot" autocomplete="off" spellcheck="false">
-      </div>
-      <div class="hub-filters">
-        <div class="hub-sort" id="hubSortGroup">
-          <button class="active" data-value="trending">Trending</button>
-          <button data-value="latest">Latest</button>
-        </div>
-        <div class="dropdown" id="hubFilterDropdown">
-          <button class="hub-chip dropdown-trigger" id="hubFilterTrigger" aria-expanded="false">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+<div class="win-divider"></div>
+<button class="icon-btn tip-down" data-tip="Minimize" id="winMinimizeBtn"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14"></path></svg></button>
+<button class="icon-btn maximize tip-down" data-tip="Maximize" id="winMaximizeBtn"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="14" rx="2" width="14" x="5" y="5"></rect></svg></button>
+<button class="icon-btn close tip-down" data-tip="Close" id="winCloseBtn"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+</div>
+</div><div class="app-shell"><nav aria-label="Main navigation" class="app-sidebar"><button aria-label="Home" class="icon-btn active" id="navHomeBtn" title="Home"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button aria-label="Editor" class="icon-btn tip-down active" data-tip="Editor" id="navEditorBtn" title="Editor"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></button><button aria-label="Script Hub" class="icon-btn tip-down" data-tip="Script Hub" id="navHubBtn" title="Script Hub"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg></button><button aria-label="Clients" class="icon-btn tip-down" data-tip="Clients" id="navClientsBtn" title="Clients">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="8" cy="7" r="3.5"></circle><circle cx="16" cy="7" r="3.5"></circle>
+<path d="M2 20c0-3.3 2.7-6 6-6h1"></path><path d="M22 20c0-3.3-2.7-6-6-6h-1"></path>
+<circle cx="12" cy="17" r="3.5"></circle>
+</svg>
+</button><button aria-label="Settings" class="icon-btn tip-down" data-tip="Settings" id="navSettingsBtn" title="Settings"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.5a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></nav><main class="page-host"><section aria-label="Home" class="home-page" id="homePage">
+<header class="home-welcome"><div aria-hidden="true" class="home-avatar" id="homeAvatar">?</div><div><h1 class="home-greeting" id="homeGreeting">Welcome!</h1><p class="home-time" id="homeTime"></p></div></header>
+<section class="home-updates"><div class="home-section-head"><h2>Updates</h2><button aria-label="Refresh updates" class="icon-btn" id="homeRefresh" title="Refresh updates">↻</button></div><p class="home-status" id="homeReleaseStatus" role="status">Loading latest release…</p><article class="release-card" hidden="" id="homeReleaseCard"><h3 id="homeReleaseTitle"></h3><p class="release-meta" id="homeReleaseMeta"></p><pre class="release-notes" id="homeReleaseNotes"></pre></article><button class="home-release-link" id="homeReleaseLink">View releases on GitHub ↗</button></section></section><div class="editor-page" id="editorPage">
+<div class="tab-toolbar">
+<div class="tabbar" id="tabbar">
+<div class="tab-caret-pin">
+<div class="tab-caret" id="tabCaret">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
+</div>
+<div class="tab-sep"></div>
+</div>
+<div class="tab-scroll" id="tabScroll">
+<div class="tab-add" id="tabAdd"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></div>
+</div>
+</div>
+<div class="script-dropdown" id="scriptDropdown">
+<input class="script-search" id="scriptSearch" placeholder="Search scripts…" type="text"/>
+<div class="script-divider"></div>
+<div class="script-list" id="scriptList"></div>
+</div>
+<div class="float-tip" id="floatTip"></div>
+<div class="toolbar">
+<div class="tool-group">
+<button class="tool-btn primary" id="btnExecute"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M7 6.5 Q7 4 9.08 5.39 L16.92 10.61 Q19 12 16.92 13.39 L9.08 18.61 Q7 20 7 17.5 Z"></path></svg>Execute</button>
+<button class="tool-btn" id="btnClear"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>Clear</button>
+<button class="tool-btn" id="btnOpen"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"></path></svg>Open</button>
+<button class="tool-btn" id="btnSave"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>Save</button>
+</div>
+<div class="tool-group">
+<button class="tool-btn" id="btnAttach"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>Attach</button>
+</div>
+</div>
+</div>
+<div class="editor-wrap">
+<div id="monacoContainer"></div>
+<div class="editor-loading" id="editorLoading">Loading editor…</div>
+</div>
+<div class="console-wrap" id="consoleWrap">
+<div class="console-label">
+<div class="console-label-left">
+<span>Console</span>
+<span class="console-dot" id="consoleStatus"></span>
+</div>
+<div class="console-filter">
+<svg class="console-filter-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+<input autocomplete="off" class="console-filter-input" id="consoleFilterInput" placeholder="Filter…" spellcheck="false" type="text"/>
+</div>
+<div class="console-actions">
+<div class="dropdown" id="consoleLevelDropdown">
+<button aria-expanded="false" class="icon-btn small dropdown-trigger" data-tip="Log levels" id="consoleLevelTrigger"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"></path></svg></button>
+<div class="dropdown-panel dropdown-panel-sm" id="consoleLevelPanel">
+<div class="dropdown-row"><div class="dropdown-row-title dropdown-row-title-icon"><span class="console-level-dot ok"></span>Success logs</div><label class="switch"><input checked="" data-level="ok" id="consoleLevelOk" type="checkbox"/><span class="switch-track"></span></label></div>
+<div class="dropdown-row"><div class="dropdown-row-title dropdown-row-title-icon"><span class="console-level-dot info"></span>Info logs</div><label class="switch"><input checked="" data-level="info" id="consoleLevelInfo" type="checkbox"/><span class="switch-track"></span></label></div>
+<div class="dropdown-row"><div class="dropdown-row-title dropdown-row-title-icon"><span class="console-level-dot err"></span>Error logs</div><label class="switch"><input checked="" data-level="err" id="consoleLevelErr" type="checkbox"/><span class="switch-track"></span></label></div>
+</div>
+</div>
+<button class="icon-btn small" data-tip="Clear console" id="btnClearConsole"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg></button>
+<button class="icon-btn small toggle" data-tip="Collapse console" id="btnToggleConsole"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
+</div>
+</div>
+<div class="console-body" id="consoleBody"></div>
+</div>
+</div><div class="hub-page" hidden="" id="hubPage">
+<div class="hub-header">
+<div class="hub-search">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+<input autocomplete="off" id="hubSearchInput" placeholder="Search for; e.g RIVALS, Steal A Brainrot" spellcheck="false" type="text"/>
+</div>
+<div class="hub-filters">
+<div class="hub-sort" id="hubSortGroup">
+<button class="active" data-value="trending">Trending</button>
+<button data-value="latest">Latest</button>
+</div>
+<div class="dropdown" id="hubFilterDropdown">
+<button aria-expanded="false" class="hub-chip dropdown-trigger" id="hubFilterTrigger">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>
             Filters
-            <svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
-          <div class="dropdown-panel" id="hubFilterPanel">
-            <div class="dropdown-row" id="hubVerifiedRow">
-              <div class="dropdown-row-title">Verified only</div>
-              <label class="switch"><input type="checkbox" id="hubVerifiedToggle"><span class="switch-track"></span></label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="hub-scroll">
-      <div class="hub-grid" id="hubGrid"></div>
-      <div class="hub-state" id="hubState"></div>
-    </div>
-    <div class="hub-paginator" id="hubPaginator" hidden>
-      <button class="page-btn" id="hubPrevBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Back</button>
-      <span class="page-dot"></span>
-      <span class="page-label">Page <span id="hubPageNum">1</span></span>
-      <span class="page-dot"></span>
-      <button class="page-btn" id="hubNextBtn">Next<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
-    </div>
-  </div>
-
-  <div class="settings-page" id="settingsPage" hidden>
-    <div class="settings-nav">
-      <div class="settings-nav-section">CORE</div>
-      <button class="settings-nav-item active" data-pane="general"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><line x1="8" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><line x1="12" y1="20" x2="3" y2="20"/><line x1="14" y1="2" x2="14" y2="6"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="22"/></svg>General</button>
-      <button class="settings-nav-item" data-pane="appearance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8Z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>Appearance</button>
-      <button class="settings-nav-item" data-pane="editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Editor</button>
-      <button class="settings-nav-item" data-pane="console"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>Console</button>
-      <button class="settings-nav-item" data-pane="key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 10-10"/><path d="m15 8 3 3"/></svg>Key</button>
-    </div>
-    <div class="settings-content">
-      <div class="settings-pane active" data-pane="general">
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Discord RPC</div><div class="settings-card-desc">Show your OblivionX status on Discord.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="discordRpcToggle" checked><span class="switch-track"></span></label><span class="settings-card-state" id="discordRpcState">On</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Restore Session</div><div class="settings-card-desc">Reopen your previous tabs when the app starts.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="restoreSessionToggle" checked><span class="switch-track"></span></label><span class="settings-card-state" id="restoreSessionState">On</span></div></div>
-        <div class="settings-card">
-          <div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8Z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg></div>
-          <div class="settings-card-text"><div class="settings-card-title">Welcome Tour</div><div class="settings-card-desc">Replay the guide of OblivionX.</div></div>
-          <div class="settings-card-control"><button class="mini-btn" id="replayTourBtn">Replay</button></div>
-        </div>
-      </div>
-      <div class="settings-pane" data-pane="appearance" hidden>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M18.4 5.6 16.3 7.7"/><path d="M21 12h-3"/><path d="M18.4 18.4l-2.1-2.1"/><path d="M12 18v3"/><path d="M7.8 16.2l-2.2 2.2"/><path d="M6 12H3"/><path d="M7.8 7.8 5.6 5.6"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Starry Background</div><div class="settings-card-desc">Show softly twinkling stars across the app.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="starfieldToggle" checked><span class="switch-track"></span></label><span class="settings-card-state" id="starfieldState">On</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Compact UI</div><div class="settings-card-desc">Reduce padding across the titlebar, toolbar, and cards.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="compactToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="compactState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Reduce Motion</div><div class="settings-card-desc">Disable animations and transitions throughout the app.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="reduceMotionToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="reduceMotionState">Off</span></div></div>
-        <div class="settings-card">
-          <div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"/><path d="M14.837 16.385a6 6 0 1 1-7.223-7.222c.624-.147.97.66.715 1.248a4 4 0 0 0 5.26 5.259c.589-.255 1.396.09 1.248.715"/><path d="M16 12a4 4 0 0 0-4-4"/><path d="m19 5-1.256 1.256"/><path d="M20 12h2"/></svg></div>
-          <div class="settings-card-text"><div class="settings-card-title">Theme</div><div class="settings-card-desc">Overall colour scheme applied to the entire application.</div></div>
-          <div class="settings-card-control">
-            <div class="dropdown" id="themeDropdown">
-              <button class="settings-select-trigger dropdown-trigger" id="themeTrigger" aria-expanded="false"><span class="settings-select-value" id="themeValue">OblivionX Dark</span><svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
-              <div class="dropdown-panel dropdown-panel-sm" id="themePanel">
-                <div class="dropdown-row dropdown-row-option" data-value="dark" aria-selected="true"><div class="dropdown-row-title">OblivionX Dark</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="midnight" aria-selected="false"><div class="dropdown-row-title">Midnight</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="slate" aria-selected="false"><div class="dropdown-row-title">Slate</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="crimson" aria-selected="false"><div class="dropdown-row-title">Crimson</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="ocean" aria-selected="false"><div class="dropdown-row-title">Ocean</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="emerald" aria-selected="false"><div class="dropdown-row-title">Emerald</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="amber" aria-selected="false"><div class="dropdown-row-title">Amber</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="rose" aria-selected="false"><div class="dropdown-row-title">Rose</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="ghost" aria-selected="false"><div class="dropdown-row-title">Ghost Light</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="settings-card">
-          <div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/><path d="M9 20h6"/></svg></div>
-          <div class="settings-card-text"><div class="settings-card-title">App Font</div><div class="settings-card-desc">Font used throughout the entire application.</div></div>
-          <div class="settings-card-control">
-            <div class="dropdown" id="fontDropdown">
-              <button class="settings-select-trigger dropdown-trigger" id="fontTrigger" aria-expanded="false"><span class="settings-select-value" id="fontValue">Chillax</span><svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
-              <div class="dropdown-panel dropdown-panel-sm" id="fontPanel">
-                <div class="dropdown-row dropdown-row-option" data-value="chillax" aria-selected="true"><div class="dropdown-row-title">Chillax</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="inter" aria-selected="false"><div class="dropdown-row-title">Inter</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="system" aria-selected="false"><div class="dropdown-row-title">System UI</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="space-grotesk" aria-selected="false"><div class="dropdown-row-title">Space Grotesk</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="outfit" aria-selected="false"><div class="dropdown-row-title">Outfit</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="manrope" aria-selected="false"><div class="dropdown-row-title">Manrope</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="jbmono" aria-selected="false"><div class="dropdown-row-title">JetBrains Mono</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-                <div class="dropdown-row dropdown-row-option" data-value="segoe" aria-selected="false"><div class="dropdown-row-title">Segoe UI</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="settings-card">
-          <div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg></div>
-          <div class="settings-card-text"><div class="settings-card-title">Accent Color</div><div class="settings-card-desc">Highlight color for active states, glows, and primary actions.</div></div>
-          <div class="settings-card-control">
-            <div class="accent-picker" id="accentPicker">
-              <button class="accent-swatch active" data-value="#ffffff" style="--sw:#ffffff" data-float-tip="OblivionX White"></button>
-              <button class="accent-swatch" data-value="#8ab4f8" style="--sw:#8ab4f8" data-float-tip="Azure"></button>
-              <button class="accent-swatch" data-value="#a78bfa" style="--sw:#a78bfa" data-float-tip="Violet"></button>
-              <button class="accent-swatch" data-value="#5eead4" style="--sw:#5eead4" data-float-tip="Teal"></button>
-              <button class="accent-swatch" data-value="#fbbf24" style="--sw:#fbbf24" data-float-tip="Amber"></button>
-              <button class="accent-swatch" data-value="#f472b6" style="--sw:#f472b6" data-float-tip="Rose"></button>
-              <button class="accent-swatch" data-value="#22c55e" style="--sw:#22c55e" data-float-tip="Green"></button>
-              <button class="accent-swatch" data-value="#ef4444" style="--sw:#ef4444" data-float-tip="Red"></button>
-              <button class="accent-swatch accent-swatch-custom" id="accentCustomBtn" data-float-tip="Custom"></button>
-            </div>
-          </div>
-        </div>
-        <div class="settings-card">
-          <div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></div>
-          <div class="settings-card-text"><div class="settings-card-title">App Version in Titlebar</div><div class="settings-card-desc">Show the OblivionX version next to the app name.</div></div>
-          <div class="settings-card-control"><label class="switch"><input type="checkbox" id="versionTitlebarToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="versionTitlebarState">Off</span></div>
-        </div>
-      </div>
-      <div class="settings-pane" data-pane="editor" hidden>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 4h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-1"/><path d="M7 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1"/><line x1="12" x2="12" y1="4" y2="20"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Cursor Width</div><div class="settings-card-desc">Thickness of the line caret in pixels.</div></div><div class="settings-card-control settings-slider-control"><input type="range" class="settings-slider" id="editorCursorWidthSlider" min="1" max="5" step="1" value="2"><span class="settings-slider-value" id="editorCursorWidthSliderValue">2</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14"/><path d="M5 12h14"/><path d="M5 16h14"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Render Whitespace</div><div class="settings-card-desc">Show spaces and tabs as visible dots and arrows.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="whitespaceToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="whitespaceState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Bracket Colors</div><div class="settings-card-desc">Colorize matching bracket pairs in the editor.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="bracketColorsToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="bracketColorsState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Lua Intellisense</div><div class="settings-card-desc">Autocomplete for Lua keywords and common Roblox APIs.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="intelToggle" checked><span class="switch-track"></span></label><span class="settings-card-state" id="intelState">On</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Font Size</div><div class="settings-card-desc">Text size inside the code editor.</div></div><div class="settings-card-control settings-slider-control"><input type="range" class="settings-slider" id="editorFontSizeSlider" min="10" max="24" step="1" value="14"><span class="settings-slider-value" id="editorFontSizeSliderValue">14px</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/><path d="M9 20h6"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Editor Font</div><div class="settings-card-desc">Font used inside the code editor.</div></div><div class="settings-card-control"><div class="dropdown" id="editorFontDropdown"><button class="settings-select-trigger dropdown-trigger" id="editorFontTrigger" aria-expanded="false"><span class="settings-select-value" id="editorFontValue">JetBrains Mono</span><svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dropdown-panel dropdown-panel-sm" id="editorFontPanel"><div class="dropdown-row dropdown-row-option" data-value="jetbrains-mono" aria-selected="true"><div class="dropdown-row-title">JetBrains Mono</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="fira-code" aria-selected="false"><div class="dropdown-row-title">Fira Code</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="cascadia-code" aria-selected="false"><div class="dropdown-row-title">Cascadia Code</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="consolas" aria-selected="false"><div class="dropdown-row-title">Consolas</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="ubuntu-mono" aria-selected="false"><div class="dropdown-row-title">Ubuntu Mono</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="source-code-pro" aria-selected="false"><div class="dropdown-row-title">Source Code Pro</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div></div></div></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Font Ligatures</div><div class="settings-card-desc">Combine character sequences like != and => into single glyphs.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorLigaturesToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorLigaturesState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 4h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-1"/><path d="M7 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1"/><line x1="12" x2="12" y1="4" y2="20"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Caret Blinking</div><div class="settings-card-desc">Animation style for the blinking text caret.</div></div><div class="settings-card-control"><div class="dropdown" id="caretBlinkDropdown"><button class="settings-select-trigger dropdown-trigger" id="caretBlinkTrigger" aria-expanded="false"><span class="settings-select-value" id="caretBlinkValue">Blink</span><svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dropdown-panel dropdown-panel-sm" id="caretBlinkPanel"><div class="dropdown-row dropdown-row-option" data-value="blink" aria-selected="true"><div class="dropdown-row-title">Blink</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="smooth" aria-selected="false"><div class="dropdown-row-title">Smooth</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="phase" aria-selected="false"><div class="dropdown-row-title">Phase</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="expand" aria-selected="false"><div class="dropdown-row-title">Expand</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="solid" aria-selected="false"><div class="dropdown-row-title">Solid</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div></div></div></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 12.586 19 19"/><path d="M3.688 3.037a.497.497 0 0 0-.651.651l6.5 15.999a.501.501 0 0 0 .947-.062l1.569-6.083a2 2 0 0 1 1.448-1.479l6.124-1.579a.5.5 0 0 0 .063-.947z"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Cursor Style</div><div class="settings-card-desc">Shape of the editing caret.</div></div><div class="settings-card-control"><div class="dropdown" id="cursorStyleDropdown"><button class="settings-select-trigger dropdown-trigger" id="cursorStyleTrigger" aria-expanded="false"><span class="settings-select-value" id="cursorStyleValue">Line</span><svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dropdown-panel dropdown-panel-sm" id="cursorStylePanel"><div class="dropdown-row dropdown-row-option" data-value="line" aria-selected="true"><div class="dropdown-row-title">Line</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="block" aria-selected="false"><div class="dropdown-row-title">Block</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="underline" aria-selected="false"><div class="dropdown-row-title">Underline</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div></div></div></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Smooth Typing</div><div class="settings-card-desc">Animate the caret gliding to its new position as you type.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorSmoothTypingToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorSmoothTypingState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Smooth Scrolling</div><div class="settings-card-desc">Animate the editor scrolling instead of jumping instantly.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorSmoothScrollToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorSmoothScrollState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><path d="M3 12h15a3 3 0 1 1 0 6h-4"/><polyline points="16 16 14 18 16 20"/><line x1="3" x2="10" y1="18" y2="18"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Word Wrap</div><div class="settings-card-desc">Wrap long lines instead of scrolling horizontally.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorWordWrapToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorWordWrapState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="18" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Minimap</div><div class="settings-card-desc">Show a zoomed out preview of the tab in the editor.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorMinimapToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorMinimapState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 6v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6"/><path d="M3 14h6"/><path d="M3 18h6"/><path d="M13 14h8"/><path d="M13 18h8"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Sticky Scroll</div><div class="settings-card-desc">Keep the current function name visible while scrolling.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorStickyScrollToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorStickyScrollState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 4 4-4 4"/><line x1="11" y1="12" x2="21" y2="12"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Tab Size</div><div class="settings-card-desc">Number of spaces a single indent level uses.</div></div><div class="settings-card-control settings-slider-control"><input type="range" class="settings-slider" id="editorTabSizeSlider" min="2" max="8" step="1" value="4"><span class="settings-slider-value" id="editorTabSizeSliderValue">4</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Auto-Closing Brackets</div><div class="settings-card-desc">Insert matching brackets when typing.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="editorAutoClosingToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="editorAutoClosingState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Line Numbers</div><div class="settings-card-desc">How line numbers are shown in the editor gutter.</div></div><div class="settings-card-control"><div class="dropdown" id="editorLineNumbersDropdown"><button class="settings-select-trigger dropdown-trigger" id="editorLineNumbersTrigger" aria-expanded="false"><span class="settings-select-value" id="editorLineNumbersValue">On</span><svg class="dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dropdown-panel dropdown-panel-sm" id="editorLineNumbersPanel"><div class="dropdown-row dropdown-row-option" data-value="on" aria-selected="true"><div class="dropdown-row-title">On</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="relative" aria-selected="false"><div class="dropdown-row-title">Relative</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="dropdown-row dropdown-row-option" data-value="off" aria-selected="false"><div class="dropdown-row-title">Off</div><svg class="dropdown-row-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div></div></div></div></div>
-      </div>
-      <div class="settings-pane" data-pane="key" hidden>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 10-10"/><path d="m15 8 3 3"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Key Status</div><div class="settings-card-desc" id="keyStatusDesc">Checking…</div></div><div class="settings-card-control"><button class="mini-btn" id="keyRefreshBtn">Refresh</button></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="settings-card-text"><div class="settings-card-title">HWID</div><div class="settings-card-desc" id="hwidValue" style="font-family:'JetBrains Mono',monospace;">…</div></div><div class="settings-card-control"><button class="mini-btn" id="copyHwidBtn">Copy</button></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/><path d="M9 20h6"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Enter Key</div><div class="settings-card-desc">Paste a key from the Get Key page, then Save.</div><div class="settings-card-desc" id="keyMsg"></div></div><div class="settings-card-control"><input class="console-filter-input" id="keyInput" placeholder="OBX-XXXXXX-XXXXXX" autocomplete="off" spellcheck="false" style="flex:1;min-width:120px;"><button class="mini-btn" id="saveKeyBtn">Save</button></div></div>
-      </div>
-      <div class="settings-pane" data-pane="console" hidden>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/><path d="M9 20h6"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Console Font Size</div><div class="settings-card-desc">Text size of console log lines.</div></div><div class="settings-card-control settings-slider-control"><input type="range" class="settings-slider" id="consoleFontSizeSlider" min="11" max="17" step="1" value="13"><span class="settings-slider-value" id="consoleFontSizeSliderValue">13px</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><path d="M3 12h15a3 3 0 1 1 0 6h-4"/><polyline points="16 16 14 18 16 20"/><line x1="3" x2="10" y1="18" y2="18"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Wrap Long Lines</div><div class="settings-card-desc">Wrap console output instead of clipping it.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="consoleWrapToggle"><span class="switch-track"></span></label><span class="settings-card-state" id="consoleWrapState">Off</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"/><path d="M3 19h18"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Max Log Lines</div><div class="settings-card-desc">Max output lines console can output.</div></div><div class="settings-card-control settings-slider-control"><input type="range" class="settings-slider" id="consoleMaxLinesSlider" min="100" max="5000" step="100" value="1000"><span class="settings-slider-value" id="consoleMaxLinesSliderValue">1000</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Autoscroll</div><div class="settings-card-desc">Follow new log lines as they arrive.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="consoleAutoscrollToggle" checked><span class="switch-track"></span></label><span class="settings-card-state" id="consoleAutoscrollState">On</span></div></div>
-        <div class="settings-card"><div class="settings-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="settings-card-text"><div class="settings-card-title">Show Timestamps</div><div class="settings-card-desc">Show the time each log line was written.</div></div><div class="settings-card-control"><label class="switch"><input type="checkbox" id="consoleTimestampsToggle" checked><span class="switch-track"></span></label><span class="settings-card-state" id="consoleTimestampsState">On</span></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="clients-backdrop" id="clientsBackdrop" hidden></div>
-  <div class="clients-page" id="clientsPage" hidden>
-  <div class="clients-header">
-    <svg class="client-panel-logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M18 30 L70 20 L80 72 L28 82 Z M41 46 L57 43 L60 59 L44 62 Z" fill="currentColor" fill-rule="evenodd"/></svg>
-    <span class="clients-title">Clients</span>
-    <div class="clients-actions">
-    <button class="icon-btn small" id="btnRefreshClients" data-tip="Refresh">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
-        <path d="M21 3v5h-5"/><path d="M3 21v-5h5"/>
-      </svg>
-    </button>
-    <button class="icon-btn small" id="btnCloseClients" data-tip="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-    </div>
-  </div>
-  <div class="clients-grid" id="clientsGrid"></div>
-  <div class="clients-empty" id="clientsEmpty" hidden><svg class="roblox-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M18 30 L70 20 L80 72 L28 82 Z M41 46 L57 43 L60 59 L44 62 Z" fill="currentColor" fill-rule="evenodd"/></svg><span id="clientsEmptyText">No Roblox process found</span></div>
+            <svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
+</button>
+<div class="dropdown-panel" id="hubFilterPanel">
+<div class="dropdown-row" id="hubVerifiedRow">
+<div class="dropdown-row-title">Verified only</div>
+<label class="switch"><input id="hubVerifiedToggle" type="checkbox"/><span class="switch-track"></span></label>
 </div>
-
-  <input type="file" id="fileInput" accept=".lua,.txt" style="display:none">
-
-  <div class="color-picker" id="colorPicker" hidden>
-    <div class="color-sv" id="colorSV"><div class="color-sv-thumb" id="colorSVThumb"></div></div>
-    <div class="color-hue" id="colorHue"><div class="color-hue-thumb" id="colorHueThumb"></div></div>
-    <div class="color-foot"><span class="color-preview" id="colorPreview"></span><input class="color-hex" id="colorHex" spellcheck="false" maxlength="7"></div>
-  </div>
-
-  <div class="tour-overlay" id="tourOverlay" hidden>
-    <div class="tour-spot" id="tourSpot"></div>
-    <div class="tour-card" id="tourCard">
-      <div class="tour-step" id="tourStep">Step 1 of 5</div>
-      <div class="tour-title" id="tourTitle"></div>
-      <div class="tour-desc" id="tourDesc"></div>
-      <div class="tour-actions"><button class="tour-skip" id="tourSkipBtn">Skip</button><button class="tour-next" id="tourNextBtn">Next</button></div>
-    </div>
-  </div>
-
-  <div class="cmdk-overlay" id="cmdkOverlay" hidden>
-    <div class="cmdk-panel">
-      <div class="cmdk-input-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" id="cmdkInput" placeholder="Type a command or search open scripts…" autocomplete="off" spellcheck="false"></div>
-      <div class="cmdk-list" id="cmdkList"></div>
-    </div>
-  </div>
-
-  <div class="keygate-overlay" id="keygateOverlay" hidden>
-    <div class="keygate-card">
-      <div class="keygate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 10-10"/><path d="m15 8 3 3"/></svg></div>
-      <div class="keygate-title">Activate OblivionX</div>
-      <div class="keygate-desc">Paste your key to unlock the executor. Need one? Grab it from the key page — it locks to this machine (HWID).</div>
-      <div class="keygate-hwid"><span class="keygate-hwid-label">HWID</span><span class="keygate-hwid-val" id="keygateHwid">…</span><button class="mini-btn" id="keygateCopyHwid">Copy</button></div>
-      <input class="keygate-input" id="keygateInput" placeholder="OBX-XXXXXX-XXXXXX" autocomplete="off" spellcheck="false">
-      <div class="keygate-actions">
-        <button class="keygate-btn ghost" id="keygateGetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>Get a key</button>
-        <button class="keygate-btn primary" id="keygateSaveBtn">Activate</button>
-      </div>
-      <div class="keygate-msg" id="keygateMsg"></div>
-    </div>
-  </div>
 </div>
+</div>
+</div>
+</div>
+<div class="hub-scroll">
+<div class="hub-grid" id="hubGrid"></div>
+<div class="hub-state" id="hubState"></div>
+</div>
+<div class="hub-paginator" hidden="" id="hubPaginator">
+<button class="page-btn" id="hubPrevBtn"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>Back</button>
+<span class="page-dot"></span>
+<span class="page-label">Page <span id="hubPageNum">1</span></span>
+<span class="page-dot"></span>
+<button class="page-btn" id="hubNextBtn">Next<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></button>
+</div>
+</div><div class="settings-page" hidden="" id="settingsPage">
+<div class="settings-nav">
+<div class="settings-nav-section">CORE</div>
+<button class="settings-nav-item active" data-pane="general"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg>General</button>
+<button class="settings-nav-item" data-pane="appearance"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8Z"></path><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle></svg>Appearance</button>
+<button class="settings-nav-item" data-pane="editor"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>Editor</button>
+<button class="settings-nav-item" data-pane="console"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" x2="20" y1="19" y2="19"></line></svg>Console</button>
+<button class="settings-nav-item" data-pane="key"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"></circle><path d="m11 12 10-10"></path><path d="m15 8 3 3"></path></svg>Key</button>
+</div>
+<div class="settings-content">
+<div class="settings-pane active" data-pane="general">
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path><path d="M8 12h.01"></path><path d="M12 12h.01"></path><path d="M16 12h.01"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Discord RPC</div><div class="settings-card-desc">Show your OblivionX status on Discord.</div></div><div class="settings-card-control"><label class="switch"><input checked="" id="discordRpcToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="discordRpcState">On</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Restore Session</div><div class="settings-card-desc">Reopen your previous tabs when the app starts.</div></div><div class="settings-card-control"><label class="switch"><input checked="" id="restoreSessionToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="restoreSessionState">On</span></div></div>
+<div class="settings-card">
+<div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8Z"></path><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle></svg></div>
+<div class="settings-card-text"><div class="settings-card-title">Welcome Tour</div><div class="settings-card-desc">Replay the guide of OblivionX.</div></div>
+<div class="settings-card-control"><button class="mini-btn" id="replayTourBtn">Replay</button></div>
+</div>
+</div>
+<div class="settings-pane" data-pane="appearance" hidden="">
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 3v3"></path><path d="M18.4 5.6 16.3 7.7"></path><path d="M21 12h-3"></path><path d="M18.4 18.4l-2.1-2.1"></path><path d="M12 18v3"></path><path d="M7.8 16.2l-2.2 2.2"></path><path d="M6 12H3"></path><path d="M7.8 7.8 5.6 5.6"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Starry Background</div><div class="settings-card-desc">Show softly twinkling stars across the app.</div></div><div class="settings-card-control"><label class="switch"><input checked="" id="starfieldToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="starfieldState">On</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"></path><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Compact UI</div><div class="settings-card-desc">Reduce padding across the titlebar, toolbar, and cards.</div></div><div class="settings-card-control"><label class="switch"><input id="compactToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="compactState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="settings-card-text"><div class="settings-card-title">Reduce Motion</div><div class="settings-card-desc">Disable animations and transitions throughout the app.</div></div><div class="settings-card-control"><label class="switch"><input id="reduceMotionToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="reduceMotionState">Off</span></div></div>
+<div class="settings-card">
+<div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 2v2"></path><path d="M14.837 16.385a6 6 0 1 1-7.223-7.222c.624-.147.97.66.715 1.248a4 4 0 0 0 5.26 5.259c.589-.255 1.396.09 1.248.715"></path><path d="M16 12a4 4 0 0 0-4-4"></path><path d="m19 5-1.256 1.256"></path><path d="M20 12h2"></path></svg></div>
+<div class="settings-card-text"><div class="settings-card-title">Theme</div><div class="settings-card-desc">Overall colour scheme applied to the entire application.</div></div>
+<div class="settings-card-control">
+<div class="dropdown" id="themeDropdown">
+<button aria-expanded="false" class="settings-select-trigger dropdown-trigger" id="themeTrigger"><span class="settings-select-value" id="themeValue">OblivionX Dark</span><svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
+<div class="dropdown-panel dropdown-panel-sm" id="themePanel">
+<div aria-selected="true" class="dropdown-row dropdown-row-option" data-value="dark"><div class="dropdown-row-title">OblivionX Dark</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="midnight"><div class="dropdown-row-title">Midnight</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="slate"><div class="dropdown-row-title">Slate</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="crimson"><div class="dropdown-row-title">Crimson</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="ocean"><div class="dropdown-row-title">Ocean</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="emerald"><div class="dropdown-row-title">Emerald</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="amber"><div class="dropdown-row-title">Amber</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="rose"><div class="dropdown-row-title">Rose</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="ghost"><div class="dropdown-row-title">Ghost Light</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+</div>
+</div>
+</div>
+</div>
+<div class="settings-card">
+<div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16"></path><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path></svg></div>
+<div class="settings-card-text"><div class="settings-card-title">App Font</div><div class="settings-card-desc">Font used throughout the entire application.</div></div>
+<div class="settings-card-control">
+<div class="dropdown" id="fontDropdown">
+<button aria-expanded="false" class="settings-select-trigger dropdown-trigger" id="fontTrigger"><span class="settings-select-value" id="fontValue">Chillax</span><svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
+<div class="dropdown-panel dropdown-panel-sm" id="fontPanel">
+<div aria-selected="true" class="dropdown-row dropdown-row-option" data-value="chillax"><div class="dropdown-row-title">Chillax</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="inter"><div class="dropdown-row-title">Inter</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="system"><div class="dropdown-row-title">System UI</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="space-grotesk"><div class="dropdown-row-title">Space Grotesk</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="outfit"><div class="dropdown-row-title">Outfit</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="manrope"><div class="dropdown-row-title">Manrope</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="jbmono"><div class="dropdown-row-title">JetBrains Mono</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="segoe"><div class="dropdown-row-title">Segoe UI</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div>
+</div>
+</div>
+</div>
+</div>
+<div class="settings-card">
+<div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"></path></svg></div>
+<div class="settings-card-text"><div class="settings-card-title">Accent Color</div><div class="settings-card-desc">Highlight color for active states, glows, and primary actions.</div></div>
+<div class="settings-card-control">
+<div class="accent-picker" id="accentPicker">
+<button class="accent-swatch active" data-float-tip="OblivionX White" data-value="#ffffff" style="--sw:#ffffff"></button>
+<button class="accent-swatch" data-float-tip="Azure" data-value="#8ab4f8" style="--sw:#8ab4f8"></button>
+<button class="accent-swatch" data-float-tip="Violet" data-value="#a78bfa" style="--sw:#a78bfa"></button>
+<button class="accent-swatch" data-float-tip="Teal" data-value="#5eead4" style="--sw:#5eead4"></button>
+<button class="accent-swatch" data-float-tip="Amber" data-value="#fbbf24" style="--sw:#fbbf24"></button>
+<button class="accent-swatch" data-float-tip="Rose" data-value="#f472b6" style="--sw:#f472b6"></button>
+<button class="accent-swatch" data-float-tip="Green" data-value="#22c55e" style="--sw:#22c55e"></button>
+<button class="accent-swatch" data-float-tip="Red" data-value="#ef4444" style="--sw:#ef4444"></button>
+<button class="accent-swatch accent-swatch-custom" data-float-tip="Custom" id="accentCustomBtn"></button>
+</div>
+</div>
+</div>
+<div class="settings-card">
+<div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg></div>
+<div class="settings-card-text"><div class="settings-card-title">App Version in Titlebar</div><div class="settings-card-desc">Show the OblivionX version next to the app name.</div></div>
+<div class="settings-card-control"><label class="switch"><input id="versionTitlebarToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="versionTitlebarState">Off</span></div>
+</div>
+</div>
+<div class="settings-pane" data-pane="editor" hidden="">
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M17 4h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-1"></path><path d="M7 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1"></path><line x1="12" x2="12" y1="4" y2="20"></line></svg></div><div class="settings-card-text"><div class="settings-card-title">Cursor Width</div><div class="settings-card-desc">Thickness of the line caret in pixels.</div></div><div class="settings-card-control settings-slider-control"><input class="settings-slider" id="editorCursorWidthSlider" max="5" min="1" step="1" type="range" value="2"/><span class="settings-slider-value" id="editorCursorWidthSliderValue">2</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 8h14"></path><path d="M5 12h14"></path><path d="M5 16h14"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Render Whitespace</div><div class="settings-card-desc">Show spaces and tabs as visible dots and arrows.</div></div><div class="settings-card-control"><label class="switch"><input id="whitespaceToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="whitespaceState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"></path><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Bracket Colors</div><div class="settings-card-desc">Colorize matching bracket pairs in the editor.</div></div><div class="settings-card-control"><label class="switch"><input id="bracketColorsToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="bracketColorsState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div><div class="settings-card-text"><div class="settings-card-title">Lua Intellisense</div><div class="settings-card-desc">Autocomplete for Lua keywords and common Roblox APIs.</div></div><div class="settings-card-control"><label class="switch"><input checked="" id="intelToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="intelState">On</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0Z"></path><path d="m14.5 12.5 2-2"></path><path d="m11.5 9.5 2-2"></path><path d="m8.5 6.5 2-2"></path><path d="m17.5 15.5 2-2"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Font Size</div><div class="settings-card-desc">Text size inside the code editor.</div></div><div class="settings-card-control settings-slider-control"><input class="settings-slider" id="editorFontSizeSlider" max="24" min="10" step="1" type="range" value="14"/><span class="settings-slider-value" id="editorFontSizeSliderValue">14px</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16"></path><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Editor Font</div><div class="settings-card-desc">Font used inside the code editor.</div></div><div class="settings-card-control"><div class="dropdown" id="editorFontDropdown"><button aria-expanded="false" class="settings-select-trigger dropdown-trigger" id="editorFontTrigger"><span class="settings-select-value" id="editorFontValue">JetBrains Mono</span><svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><div class="dropdown-panel dropdown-panel-sm" id="editorFontPanel"><div aria-selected="true" class="dropdown-row dropdown-row-option" data-value="jetbrains-mono"><div class="dropdown-row-title">JetBrains Mono</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="fira-code"><div class="dropdown-row-title">Fira Code</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="cascadia-code"><div class="dropdown-row-title">Cascadia Code</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="consolas"><div class="dropdown-row-title">Consolas</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="ubuntu-mono"><div class="dropdown-row-title">Ubuntu Mono</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="source-code-pro"><div class="dropdown-row-title">Source Code Pro</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div></div></div></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><line x1="8" x2="16" y1="12" y2="12"></line></svg></div><div class="settings-card-text"><div class="settings-card-title">Font Ligatures</div><div class="settings-card-desc">Combine character sequences like != and =&gt; into single glyphs.</div></div><div class="settings-card-control"><label class="switch"><input id="editorLigaturesToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="editorLigaturesState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M17 4h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-1"></path><path d="M7 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1"></path><line x1="12" x2="12" y1="4" y2="20"></line></svg></div><div class="settings-card-text"><div class="settings-card-title">Caret Blinking</div><div class="settings-card-desc">Animation style for the blinking text caret.</div></div><div class="settings-card-control"><div class="dropdown" id="caretBlinkDropdown"><button aria-expanded="false" class="settings-select-trigger dropdown-trigger" id="caretBlinkTrigger"><span class="settings-select-value" id="caretBlinkValue">Blink</span><svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><div class="dropdown-panel dropdown-panel-sm" id="caretBlinkPanel"><div aria-selected="true" class="dropdown-row dropdown-row-option" data-value="blink"><div class="dropdown-row-title">Blink</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="smooth"><div class="dropdown-row-title">Smooth</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="phase"><div class="dropdown-row-title">Phase</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="expand"><div class="dropdown-row-title">Expand</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="solid"><div class="dropdown-row-title">Solid</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div></div></div></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12.586 12.586 19 19"></path><path d="M3.688 3.037a.497.497 0 0 0-.651.651l6.5 15.999a.501.501 0 0 0 .947-.062l1.569-6.083a2 2 0 0 1 1.448-1.479l6.124-1.579a.5.5 0 0 0 .063-.947z"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Cursor Style</div><div class="settings-card-desc">Shape of the editing caret.</div></div><div class="settings-card-control"><div class="dropdown" id="cursorStyleDropdown"><button aria-expanded="false" class="settings-select-trigger dropdown-trigger" id="cursorStyleTrigger"><span class="settings-select-value" id="cursorStyleValue">Line</span><svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><div class="dropdown-panel dropdown-panel-sm" id="cursorStylePanel"><div aria-selected="true" class="dropdown-row dropdown-row-option" data-value="line"><div class="dropdown-row-title">Line</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="block"><div class="dropdown-row-title">Block</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="underline"><div class="dropdown-row-title">Underline</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div></div></div></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Smooth Typing</div><div class="settings-card-desc">Animate the caret gliding to its new position as you type.</div></div><div class="settings-card-control"><label class="switch"><input id="editorSmoothTypingToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="editorSmoothTypingState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Smooth Scrolling</div><div class="settings-card-desc">Animate the editor scrolling instead of jumping instantly.</div></div><div class="settings-card-control"><label class="switch"><input id="editorSmoothScrollToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="editorSmoothScrollState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="3" x2="21" y1="6" y2="6"></line><path d="M3 12h15a3 3 0 1 1 0 6h-4"></path><polyline points="16 16 14 18 16 20"></polyline><line x1="3" x2="10" y1="18" y2="18"></line></svg></div><div class="settings-card-text"><div class="settings-card-title">Word Wrap</div><div class="settings-card-desc">Wrap long lines instead of scrolling horizontally.</div></div><div class="settings-card-control"><label class="switch"><input id="editorWordWrapToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="editorWordWrapState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="18" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></svg></div><div class="settings-card-text"><div class="settings-card-title">Minimap</div><div class="settings-card-desc">Show a zoomed out preview of the tab in the editor.</div></div><div class="settings-card-control"><label class="switch"><input id="editorMinimapToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="editorMinimapState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 6h18"></path><path d="M3 6v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6"></path><path d="M3 14h6"></path><path d="M3 18h6"></path><path d="M13 14h8"></path><path d="M13 18h8"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Sticky Scroll</div><div class="settings-card-desc">Keep the current function name visible while scrolling.</div></div><div class="settings-card-control"><label class="switch"><input id="editorStickyScrollToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="editorStickyScrollState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m3 8 4 4-4 4"></path><line x1="11" x2="21" y1="12" y2="12"></line></svg></div><div class="settings-card-text"><div class="settings-card-title">Tab Size</div><div class="settings-card-desc">Number of spaces a single indent level uses.</div></div><div class="settings-card-control settings-slider-control"><input class="settings-slider" id="editorTabSizeSlider" max="8" min="2" step="1" type="range" value="4"/><span class="settings-slider-value" id="editorTabSizeSliderValue">4</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"></path><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Auto-Closing Brackets</div><div class="settings-card-desc">Insert matching brackets when typing.</div></div><div class="settings-card-control"><label class="switch"><input id="editorAutoClosingToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="editorAutoClosingState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="10" x2="21" y1="6" y2="6"></line><line x1="10" x2="21" y1="12" y2="12"></line><line x1="10" x2="21" y1="18" y2="18"></line><path d="M4 6h1v4"></path><path d="M4 10h2"></path><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Line Numbers</div><div class="settings-card-desc">How line numbers are shown in the editor gutter.</div></div><div class="settings-card-control"><div class="dropdown" id="editorLineNumbersDropdown"><button aria-expanded="false" class="settings-select-trigger dropdown-trigger" id="editorLineNumbersTrigger"><span class="settings-select-value" id="editorLineNumbersValue">On</span><svg class="dropdown-caret" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button><div class="dropdown-panel dropdown-panel-sm" id="editorLineNumbersPanel"><div aria-selected="true" class="dropdown-row dropdown-row-option" data-value="on"><div class="dropdown-row-title">On</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="relative"><div class="dropdown-row-title">Relative</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div><div aria-selected="false" class="dropdown-row dropdown-row-option" data-value="off"><div class="dropdown-row-title">Off</div><svg class="dropdown-row-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></div></div></div></div></div>
+</div>
+<div class="settings-pane" data-pane="key" hidden="">
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"></circle><path d="m11 12 10-10"></path><path d="m15 8 3 3"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Key Status</div><div class="settings-card-desc" id="keyStatusDesc">Checking…</div></div><div class="settings-card-control"><button class="mini-btn" id="keyRefreshBtn">Refresh</button></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="10" rx="2" width="18" x="3" y="11"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">HWID</div><div class="settings-card-desc" id="hwidValue" style="font-family:'JetBrains Mono',monospace;">…</div></div><div class="settings-card-control"><button class="mini-btn" id="copyHwidBtn">Copy</button></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16"></path><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Enter Key</div><div class="settings-card-desc">Paste a key from the Get Key page, then Save.</div><div class="settings-card-desc" id="keyMsg"></div></div><div class="settings-card-control"><input autocomplete="off" class="console-filter-input" id="keyInput" placeholder="OBX-XXXXXX-XXXXXX" spellcheck="false" style="flex:1;min-width:120px;"/><button class="mini-btn" id="saveKeyBtn">Save</button></div></div>
+</div>
+<div class="settings-pane" data-pane="console" hidden="">
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16"></path><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Console Font Size</div><div class="settings-card-desc">Text size of console log lines.</div></div><div class="settings-card-control settings-slider-control"><input class="settings-slider" id="consoleFontSizeSlider" max="17" min="11" step="1" type="range" value="13"/><span class="settings-slider-value" id="consoleFontSizeSliderValue">13px</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="3" x2="21" y1="6" y2="6"></line><path d="M3 12h15a3 3 0 1 1 0 6h-4"></path><polyline points="16 16 14 18 16 20"></polyline><line x1="3" x2="10" y1="18" y2="18"></line></svg></div><div class="settings-card-text"><div class="settings-card-title">Wrap Long Lines</div><div class="settings-card-desc">Wrap console output instead of clipping it.</div></div><div class="settings-card-control"><label class="switch"><input id="consoleWrapToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="consoleWrapState">Off</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"></path><path d="M3 19h18"></path><path d="M8 9h8"></path><path d="M8 12h5"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Max Log Lines</div><div class="settings-card-desc">Max output lines console can output.</div></div><div class="settings-card-control settings-slider-control"><input class="settings-slider" id="consoleMaxLinesSlider" max="5000" min="100" step="100" type="range" value="1000"/><span class="settings-slider-value" id="consoleMaxLinesSliderValue">1000</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg></div><div class="settings-card-text"><div class="settings-card-title">Autoscroll</div><div class="settings-card-desc">Follow new log lines as they arrive.</div></div><div class="settings-card-control"><label class="switch"><input checked="" id="consoleAutoscrollToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="consoleAutoscrollState">On</span></div></div>
+<div class="settings-card"><div class="settings-card-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="settings-card-text"><div class="settings-card-title">Show Timestamps</div><div class="settings-card-desc">Show the time each log line was written.</div></div><div class="settings-card-control"><label class="switch"><input checked="" id="consoleTimestampsToggle" type="checkbox"/><span class="switch-track"></span></label><span class="settings-card-state" id="consoleTimestampsState">On</span></div></div>
+</div>
+</div>
+</div></main></div>
 
+
+
+<div class="clients-backdrop" hidden="" id="clientsBackdrop"></div>
+<div class="clients-page" hidden="" id="clientsPage">
+<div class="clients-header">
+<svg aria-hidden="true" class="client-panel-logo" viewbox="0 0 100 100"><path d="M18 30 L70 20 L80 72 L28 82 Z M41 46 L57 43 L60 59 L44 62 Z" fill="currentColor" fill-rule="evenodd"></path></svg>
+<span class="clients-title">Clients</span>
+<div class="clients-actions">
+<button class="icon-btn small" data-tip="Refresh" id="btnRefreshClients">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+<path d="M21 3v5h-5"></path><path d="M3 21v-5h5"></path>
+</svg>
+</button>
+<button class="icon-btn small" data-tip="Close" id="btnCloseClients"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+</div>
+</div>
+<div class="clients-grid" id="clientsGrid"></div>
+<div class="clients-empty" hidden="" id="clientsEmpty"><svg aria-hidden="true" class="roblox-mark" viewbox="0 0 100 100"><path d="M18 30 L70 20 L80 72 L28 82 Z M41 46 L57 43 L60 59 L44 62 Z" fill="currentColor" fill-rule="evenodd"></path></svg><span id="clientsEmptyText">No Roblox process found</span></div>
+</div>
+<input accept=".lua,.txt" id="fileInput" style="display:none" type="file"/>
+<div class="color-picker" hidden="" id="colorPicker">
+<div class="color-sv" id="colorSV"><div class="color-sv-thumb" id="colorSVThumb"></div></div>
+<div class="color-hue" id="colorHue"><div class="color-hue-thumb" id="colorHueThumb"></div></div>
+<div class="color-foot"><span class="color-preview" id="colorPreview"></span><input class="color-hex" id="colorHex" maxlength="7" spellcheck="false"/></div>
+</div>
+<div class="tour-overlay" hidden="" id="tourOverlay">
+<div class="tour-spot" id="tourSpot"></div>
+<div class="tour-card" id="tourCard">
+<div class="tour-step" id="tourStep">Step 1 of 5</div>
+<div class="tour-title" id="tourTitle"></div>
+<div class="tour-desc" id="tourDesc"></div>
+<div class="tour-actions"><button class="tour-skip" id="tourSkipBtn">Skip</button><button class="tour-next" id="tourNextBtn">Next</button></div>
+</div>
+</div>
+<div class="cmdk-overlay" hidden="" id="cmdkOverlay">
+<div class="cmdk-panel">
+<div class="cmdk-input-row"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg><input autocomplete="off" id="cmdkInput" placeholder="Type a command or search open scripts…" spellcheck="false" type="text"/></div>
+<div class="cmdk-list" id="cmdkList"></div>
+</div>
+</div>
+<div class="keygate-overlay" hidden="" id="keygateOverlay">
+<div class="keygate-card">
+<div class="keygate-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"></circle><path d="m11 12 10-10"></path><path d="m15 8 3 3"></path></svg></div>
+<div class="keygate-title">Activate OblivionX</div>
+<div class="keygate-desc">Paste your key to unlock the executor. Need one? Grab it from the key page — it locks to this machine (HWID).</div>
+<div class="keygate-hwid"><span class="keygate-hwid-label">HWID</span><span class="keygate-hwid-val" id="keygateHwid">…</span><button class="mini-btn" id="keygateCopyHwid">Copy</button></div>
+<input autocomplete="off" class="keygate-input" id="keygateInput" placeholder="OBX-XXXXXX-XXXXXX" spellcheck="false"/>
+<div class="keygate-actions">
+<button class="keygate-btn ghost" id="keygateGetBtn"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>Get a key</button>
+<button class="keygate-btn primary" id="keygateSaveBtn">Activate</button>
+</div>
+<div class="keygate-msg" id="keygateMsg"></div>
+</div>
+</div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/loader.js"></script>
 <script>
 (function(){
@@ -1003,8 +996,8 @@
   fileInput.addEventListener('change',(e)=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{const t={id:genId(),name:file.name.replace(/\.(lua|txt)$/i,''),code:reader.result,savedCode:reader.result};tabs.push(t);activeId=t.id;if(editor)editor.setModel(getModel(t));renderTabs();saveState();log('info','Opened "'+file.name+'".');};reader.readAsText(file);fileInput.value='';});
   const navEditorBtn=document.getElementById('navEditorBtn');const navHubBtn=document.getElementById('navHubBtn');const navSettingsBtn=document.getElementById('navSettingsBtn');const editorPage=document.getElementById('editorPage');const hubPage=document.getElementById('hubPage');const settingsPage=document.getElementById('settingsPage');let hubLoadedOnce=false;
   let currentPage=null;
-  function showPage(name){const changed=currentPage!==null&&currentPage!==name;currentPage=name;editorPage.hidden=name!=='editor';hubPage.hidden=name!=='hub';settingsPage.hidden=name!=='settings';navEditorBtn.classList.toggle('active',name==='editor');navHubBtn.classList.toggle('active',name==='hub');navSettingsBtn.classList.toggle('active',name==='settings');if(changed){const el=name==='editor'?editorPage:name==='hub'?hubPage:settingsPage;el.classList.remove('page-enter');void el.offsetWidth;el.classList.add('page-enter');}if(name==='hub'&&!hubLoadedOnce){hubLoadedOnce=true;loadHub(true);}}
-  navEditorBtn.addEventListener('click',()=>showPage('editor'));navHubBtn.addEventListener('click',()=>showPage('hub'));navSettingsBtn.addEventListener('click',()=>showPage('settings'));
+  function showPage(name){const changed=currentPage!==null&&currentPage!==name;currentPage=name;document.getElementById('homePage').hidden=name!=='home';document.getElementById('navHomeBtn').classList.toggle('active',name==='home');editorPage.hidden=name!=='editor';hubPage.hidden=name!=='hub';settingsPage.hidden=name!=='settings';navEditorBtn.classList.toggle('active',name==='editor');navHubBtn.classList.toggle('active',name==='hub');navSettingsBtn.classList.toggle('active',name==='settings');if(changed){const el=name==='home'?document.getElementById('homePage'):name==='editor'?editorPage:name==='hub'?hubPage:settingsPage;el.classList.remove('page-enter');void el.offsetWidth;el.classList.add('page-enter');}if(name==='hub'&&!hubLoadedOnce){hubLoadedOnce=true;loadHub(true);}}
+  document.getElementById('navHomeBtn').addEventListener('click',()=>showPage('home'));navEditorBtn.addEventListener('click',()=>showPage('editor'));navHubBtn.addEventListener('click',()=>showPage('hub'));navSettingsBtn.addEventListener('click',()=>showPage('settings'));
   const settingsNavItems=[...document.querySelectorAll('.settings-nav-item')];const settingsPanes=[...document.querySelectorAll('.settings-pane')];
   function showSettingsPane(pane){settingsNavItems.forEach(b=>b.classList.toggle('active',b.dataset.pane===pane));settingsPanes.forEach(p=>{const active=p.dataset.pane===pane;p.classList.toggle('active',active);p.hidden=!active;});}
   settingsNavItems.forEach(btn=>{btn.addEventListener('click',()=>showSettingsPane(btn.dataset.pane));});
@@ -1503,6 +1496,74 @@ if(hasWebView2()){
 // Field_GotFocus / Field_LostFocus / PasswordBox_PasswordChanged / Window_MouseDown / ForgotPassword_Click
 // are XAML code-behind events — implement them in LoginWindow.xaml.cs / RegisterWindow.xaml.cs.
 // startRename() is the JS function for the tab renaming feature, not related to login.
+</script>
+
+<script id="homeDashboardScript">
+(()=>{
+const $=id=>document.getElementById(id);
+let username='', keyState=null, refreshBusy=false;
+const releaseUrl='https://github.com/OblivionXDevelopmentinc/obx-install/releases';
+function timestamp(value){
+ if(typeof value==='number')return value<1e12?value*1000:value;
+ if(typeof value==='string'&&/^\d+(\.\d+)?$/.test(value.trim()))return timestamp(Number(value));
+ return typeof value==='string'?Date.parse(value):NaN;
+}
+function tick(){
+ const now=new Date(), hour=now.getHours();
+ const greeting=hour<12?'Good morning':hour<18?'Good afternoon':'Good evening';
+ $('homeGreeting').textContent=greeting+(username?', '+username+'!':'!');
+ $('homeAvatar').textContent=username?Array.from(username)[0].toUpperCase():'?';
+ $('homeTime').textContent="It's currently: "+now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+ const chip=$('keyCountdown');chip.classList.remove('expired');
+ if(!keyState){chip.textContent='Key status unavailable';return;}
+ if(!keyState.installed){chip.textContent='No key installed';return;}
+ if(!keyState.valid){chip.textContent='Key invalid';chip.classList.add('expired');return;}
+ const expiry=timestamp(keyState.expires_at);
+ if(!Number.isFinite(expiry)){chip.textContent='Key active · expiry unavailable';return;}
+ const remaining=Math.max(0,Math.ceil((expiry-Date.now())/1000));
+ if(!remaining){chip.textContent='Key expired';chip.classList.add('expired');return;}
+ const days=Math.floor(remaining/86400), hours=Math.floor(remaining%86400/3600), minutes=Math.floor(remaining%3600/60), seconds=remaining%60;
+ chip.textContent='Key · '+(days?days+'d ':'')+[hours,minutes,seconds].map(v=>String(v).padStart(2,'0')).join(':')+' left';
+ chip.title='Expires '+new Date(expiry).toLocaleString();
+}
+function receive(data){
+ if(!data||typeof data!=='object')return;
+ if(data.action==='account-state')username=typeof data.username==='string'?data.username:'';
+ if(data.action==='key-state')keyState=data;
+ tick();
+}
+const bridge=window.chrome?.webview;
+if(bridge){bridge.addEventListener('message',event=>{try{receive(typeof event.data==='string'?JSON.parse(event.data):event.data);}catch{}});}
+window.ObxHome={setAccount:username=>receive({action:'account-state',username}),setKeyState:state=>receive({...state,action:'key-state'})};
+function requestState(){if(bridge){bridge.postMessage({action:'get-account-state'});bridge.postMessage({action:'get-key-state'});}}
+function renderRelease(release,cached=false){
+ $('homeReleaseCard').hidden=false;
+ $('homeReleaseTitle').textContent=release.name||release.tag_name||'Latest release';
+ const published=Date.parse(release.published_at);
+ $('homeReleaseMeta').textContent=[release.tag_name,Number.isFinite(published)?new Date(published).toLocaleDateString():null].filter(Boolean).join(' · ');
+ $('homeReleaseNotes').textContent=release.body||'No update notes were provided for this release.';
+ $('homeReleaseStatus').textContent=cached?'Showing previously saved notes. Refresh to check for newer updates.':'Latest published release';
+}
+async function loadRelease(){
+ if(refreshBusy)return;refreshBusy=true;$('homeRefresh').disabled=true;
+ $('homeReleaseStatus').textContent='Checking latest release…';
+ const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),12000);
+ try{
+ const response=await fetch('https://api.github.com/repos/OblivionXDevelopmentinc/obx-install/releases/latest',{headers:{Accept:'application/vnd.github+json'},signal:controller.signal,cache:'no-cache'});
+ if(!response.ok)throw new Error(response.status===404?'No public latest release was found (or the repository is unavailable).':response.status===403||response.status===429?'GitHub access was denied or rate-limited.':'GitHub returned HTTP '+response.status+'.');
+ const release=await response.json();renderRelease(release);
+ try{localStorage.setItem('obxHomeLatestRelease',JSON.stringify(release));}catch{}
+ }catch(error){
+ let cached=false;try{const saved=JSON.parse(localStorage.getItem('obxHomeLatestRelease'));if(saved){renderRelease(saved,true);cached=true;}}catch{}
+ $('homeReleaseStatus').textContent=(cached?'Showing saved notes. ':'')+(error.name==='AbortError'?'GitHub request timed out.':error.message)+' Use refresh to retry.';
+ }finally{clearTimeout(timer);refreshBusy=false;$('homeRefresh').disabled=false;}
+}
+$('homeRefresh').addEventListener('click',loadRelease);
+$('homeReleaseLink').addEventListener('click',()=>{if(bridge)bridge.postMessage({action:'open-url',url:releaseUrl});else window.open(releaseUrl,'_blank','noopener,noreferrer');});
+$('navHomeBtn').click();tick();requestState();loadRelease();setInterval(tick,1000);
+setInterval(()=>{if(bridge)bridge.postMessage({action:'get-key-state'});},60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){tick();requestState();}});
+})();
 </script>
 </body>
 </html>
