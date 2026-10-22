@@ -602,7 +602,7 @@
 </style>
 
 <style id="homeSidebarStyles">
-.titlebar{flex-shrink:0}.brand{min-width:0}.key-countdown{font-size:12px;color:var(--text-dim);font-variant-numeric:tabular-nums;white-space:nowrap}.key-countdown.expired{color:var(--err)}
+.titlebar{flex-shrink:0}.brand{min-width:0}.key-countdown{font-size:12px;color:var(--text-dim);font-variant-numeric:tabular-nums;white-space:nowrap}.key-countdown.expired{color:var(--err)}.key-signin-btn{font:inherit;font-size:11px;font-weight:600;line-height:1;color:#fff;background:linear-gradient(135deg,#5865f2,#4752c4);border:0;border-radius:6px;padding:5px 10px;margin-left:8px;cursor:pointer;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;transition:filter .15s,background .15s}.key-signin-btn:hover{filter:brightness(1.12)}.key-signin-btn.signed{background:rgba(255,255,255,.07);color:var(--text-dim);font-weight:500}.key-signin-btn.signed:hover{background:rgba(255,255,255,.14);color:#fff;filter:none}
 .app-shell{display:flex;flex:1;min-height:0}.app-sidebar{width:56px;flex-shrink:0;background:var(--titlebar);border-right:1px solid var(--border);display:flex;align-items:center;flex-direction:column;gap:10px;padding:12px 6px}.app-sidebar .icon-btn{width:38px;height:38px;flex-shrink:0}.page-host{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .home-page{flex:1;min-height:0;overflow:auto;padding:28px;position:relative;background:radial-gradient(ellipse at 90% 10%,var(--accent-dim),transparent 65%),var(--win)}.home-page[hidden]{display:none}.home-welcome{display:flex;gap:16px;align-items:center;margin-bottom:34px}.home-avatar{width:58px;height:58px;border-radius:16px;background:var(--accent-dim);color:var(--accent);display:grid;place-items:center;font-size:24px;font-weight:600;flex-shrink:0}.home-greeting{font-size:clamp(18px,3vw,26px);font-weight:600;overflow-wrap:anywhere}.home-time{font-size:14px;color:var(--text-dim);margin-top:5px}.home-updates{max-width:880px}.home-section-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}.home-section-head h2{font-size:15px;font-weight:600}.home-section-head button{margin-left:auto}.release-card{border:1px solid var(--border-strong);border-radius:14px;background:var(--editor);padding:22px}.release-card h3{font-size:18px;margin-bottom:8px}.release-meta{font-size:12px;color:var(--text-dim);margin-bottom:18px}.release-notes{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--ui-font);font-size:13px;line-height:1.8}.home-status{color:var(--text-dim);font-size:13px;margin-bottom:12px}.home-release-link{margin-top:18px;color:var(--accent);border:0;background:none;cursor:pointer;font:inherit;font-size:12px}.app-sidebar [data-tip]::after,.app-sidebar [data-tip]::before{display:none}
 @media(max-width:520px){.home-page{padding:18px}.release-card{padding:16px}.key-countdown{font-size:10px}}
@@ -628,7 +628,7 @@
 <img alt="" src="icon.png"/>
 </div>
 <span class="brand-version" hidden="" id="brandVersion">v14.0</span>
-<span class="key-countdown" id="keyCountdown">Key status unavailable</span></div>
+<span class="key-countdown" id="keyCountdown">Key status unavailable</span><button class="key-signin-btn" id="topSignInBtn" type="button" title="Sign in with Discord">Sign in</button></div>
 <div class="title-actions">
 
 
@@ -1513,6 +1513,17 @@ function acctToken() { try { return localStorage.getItem(ACCT_TOKEN_KEY) || ''; 
 function setAcctToken(t) { try { if (t) localStorage.setItem(ACCT_TOKEN_KEY, t); else localStorage.removeItem(ACCT_TOKEN_KEY); } catch (e) {} }
 function acctOpen(url) { if (hasWebView2()) webviewPost('open-url', { url }); else window.open(url, '_blank', 'noopener'); }
 function acctDate(iso) { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleString(); }
+function currentHwid() {
+  try {
+    const a = document.getElementById('hwidValue');
+    const v = a ? (a.textContent || '').trim() : '';
+    if (/^[A-Fa-f0-9]{32,128}$/.test(v)) return v;
+    const b = document.getElementById('keygateHwid');
+    const w = b ? (b.textContent || '').trim() : '';
+    if (/^[A-Fa-f0-9]{32,128}$/.test(w)) return w;
+  } catch (e) {}
+  return '';
+}
 
 async function acctApi(path, opts) {
   const tok = acctToken();
@@ -1538,8 +1549,17 @@ function acctHomeUser(u) {
   } catch (e) {}
 }
 
+function updateTopSignIn(signed, name) {
+  const btn = document.getElementById('topSignInBtn');
+  if (!btn) return;
+  btn.classList.toggle('signed', !!signed);
+  btn.textContent = signed ? (name || 'Account') : 'Sign in';
+  btn.title = signed ? 'Manage Discord account' : 'Sign in with Discord';
+}
+
 function renderAccount(user, key) {
   if (!user) {
+    updateTopSignIn(false, '');
     acctDesc.textContent = 'Not signed in. Sign in to pull your active key automatically.';
     acctKeyDesc.style.display = 'none';
     acctSignInBtn.style.display = '';
@@ -1548,6 +1568,7 @@ function renderAccount(user, key) {
     return;
   }
   const name = user.global_name || user.username || 'Discord user';
+  updateTopSignIn(true, name);
   acctDesc.textContent = 'Signed in as ' + name + (user.username ? ' (@' + user.username + ')' : '');
   acctSignInBtn.style.display = 'none';
   acctGetKeyBtn.style.display = '';
@@ -1569,9 +1590,16 @@ function renderAccount(user, key) {
 async function refreshAccount() {
   if (!acctToken()) { renderAccount(null); return; }
   try {
-    const r = await acctApi('/api/account/summary', { method: 'GET' });
+    let r = await acctApi('/api/account/summary', { method: 'GET' });
     if (r.status === 401) { renderAccount(null); return; }
     if (!r.ok) return;
+    if (!r.data.key) {
+      const hwid = currentHwid();
+      if (hwid) {
+        const c = await acctApi('/api/account/claim', { method: 'POST', body: JSON.stringify({ hwid }) });
+        if (c.ok && c.data && c.data.claimed) r = await acctApi('/api/account/summary', { method: 'GET' });
+      }
+    }
     renderAccount(r.data.user, r.data.key);
     acctHomeUser(r.data.user);
   } catch (e) {}
@@ -1585,7 +1613,7 @@ async function redeemCode(code, onDone) {
   }
   acctCodeMsg.textContent = 'Linking…';
   try {
-    const r = await acctApi('/api/auth/device/redeem', { method: 'POST', body: JSON.stringify({ code: clean }) });
+    const r = await acctApi('/api/auth/device/redeem', { method: 'POST', body: JSON.stringify({ code: clean, hwid: currentHwid() }) });
     if (!r.ok) {
       const map = {
         INVALID_CODE: 'That code is not valid.',
@@ -1608,7 +1636,8 @@ async function redeemCode(code, onDone) {
   }
 }
 
-acctSignInBtn.addEventListener('click', () => { acctOpen(ACCT_DEVICE_URL); acctCodeCard.style.display = ''; acctCodeMsg.textContent = 'Waiting for the browser…'; acctCodeInput.value = ''; try { acctCodeInput.focus(); } catch (e) {} });
+function acctStartSignIn() { acctOpen(ACCT_DEVICE_URL); acctCodeCard.style.display = ''; acctCodeMsg.textContent = 'Waiting for the browser…'; acctCodeInput.value = ''; try { acctCodeInput.focus(); } catch (e) {} }
+acctSignInBtn.addEventListener('click', acctStartSignIn);
 acctGetKeyBtn.addEventListener('click', () => acctOpen(KEY_PAGE_URL));
 acctSignOutBtn.addEventListener('click', () => {
   try { acctApi('/api/auth/logout', { method: 'POST' }); } catch (e) {}
@@ -1622,6 +1651,14 @@ acctCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') redeem
 document.querySelector('.settings-nav-item[data-pane="key"]').addEventListener('click', refreshAccount);
 refreshAccount();
 
+const topSignInBtn = document.getElementById('topSignInBtn');
+if (topSignInBtn) topSignInBtn.addEventListener('click', () => {
+  try { document.getElementById('navSettingsBtn').click(); } catch (e) {}
+  try { document.querySelector('.settings-nav-item[data-pane="key"]').click(); } catch (e) {}
+  if (acctToken()) refreshAccount(); else acctStartSignIn();
+});
+window.ObxAccount = { signIn: acctStartSignIn, refresh: refreshAccount, currentHwid };
+
 // Startup gate: sign in and auto-activate the account's key.
 const keygateDiscordBtn = document.getElementById('keygateDiscordBtn');
 const keygateLinkBox = document.getElementById('keygateLinkBox');
@@ -1632,7 +1669,7 @@ async function keygateLink() {
   if (raw.replace(/[^A-Za-z0-9]/g, '').length !== 8) { setKeygateMsg('Enter the full 8-character code.', 'err'); return; }
   setKeygateMsg('Linking…');
   try {
-    const r = await acctApi('/api/auth/device/redeem', { method: 'POST', body: JSON.stringify({ code: raw }) });
+    const r = await acctApi('/api/auth/device/redeem', { method: 'POST', body: JSON.stringify({ code: raw, hwid: currentHwid() }) });
     if (!r.ok) {
       const map = {
         INVALID_CODE: 'That code is not valid.',
