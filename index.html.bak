@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" style="background-color: #0d0d0d !important; color-scheme: dark;">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>constraintt.ez</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="/fonts/local-fonts.css" />
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        --theme-bg-base: #0D0D0D;
+        --theme-bg-surface: #101010;
+        --theme-bg-elevated: #151515;
+        --theme-bg-active: #1C1C1C;
+        --theme-text-primary: #EDEDED;
+        --theme-text-secondary: #A0A0A0;
+        --theme-text-muted: #666666;
+        --theme-line: #1F1F1F;
+        --theme-border: #1F1F1F;
+        --theme-border-subtle: #191919;
+        --theme-accent: #3B82F6;
+        --theme-accent-fg: #FFFFFF;
+        --theme-accent-soft: rgba(59, 130, 246, 0.15);
+        --theme-accent-hover: #2563EB;
+      }
+      html, body {
+        background-color: #0D0D0D;
+        color-scheme: dark;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+    </style>
+    <script>
+      if (window.location.pathname.endsWith('/index.html')) {
+        try { window.history.replaceState(null, '', '/'); } catch(e) {}
+      }
+      // Universal Tauri 2.0 Mock & Bridge
+      window.__TAURI_INTERNALS__ = window.__TAURI_INTERNALS__ || {
+        plugins: {},
+        callbacks: {},
+        metadata: { currentWindow: { label: 'main' }, currentWebview: { label: 'main' } },
+        transformCallback: function(cb, once) {
+          var id = Math.floor(Math.random() * 1000000000);
+          window.__TAURI_INTERNALS__.callbacks[id] = function(res) {
+            if (once) delete window.__TAURI_INTERNALS__.callbacks[id];
+            return typeof cb === 'function' ? cb(res) : null;
+          };
+          return id;
+        },
+        unregisterCallback: function(id) { delete window.__TAURI_INTERNALS__.callbacks[id]; },
+        invoke: function(cmd, args) {
+          return new Promise(function(resolve, reject) {
+            if (window.chrome && window.chrome.webview) {
+              var callbackId = 'cb_' + Math.random().toString(36).substring(2);
+              window.__TAURI_INTERNALS__.callbacks[callbackId] = { resolve: resolve, reject: reject };
+              window.chrome.webview.postMessage({ type: 'tauri_invoke', cmd: cmd, args: args || {}, callbackId: callbackId });
+            } else {
+              // Browser Fallbacks
+              if (cmd === 'check_license' || cmd === 'redeem_key') return resolve({ valid: true, reason: null, expires_at: null, has_token: true });
+              if (cmd === 'plugin:window|is_maximized' || cmd === 'plugin:window|is_fullscreen') return resolve(false);
+              if (cmd === 'plugin:window|inner_size' || cmd === 'plugin:window|outer_size') return resolve({ width: window.innerWidth, height: window.innerHeight });
+              if (cmd === 'plugin:window|scale_factor') return resolve(window.devicePixelRatio || 1);
+              if (cmd === 'plugin:window|get_all_windows') return resolve(['main']);
+              if (cmd === 'plugin:fs|exists') return resolve(false);
+              if (cmd === 'plugin:fs|read_text_file') return resolve('{}');
+              if (cmd === 'plugin:fs|read_dir' || cmd === 'get_roblox_clients' || cmd === 'get_installed_launchers' || cmd === 'list_installed_versions' || cmd === 'get_roblox_instances') return resolve([]);
+              if (cmd === 'detect_roblox_install') return resolve({ installed: true, path: '' });
+              return resolve(true);
+            }
+          });
+        },
+        postMessage: function(msg) {
+          if (window.chrome && window.chrome.webview) window.chrome.webview.postMessage(msg);
+        }
+      };
+      window.__TAURI_EVENT_PLUGIN_INTERNALS__ = window.__TAURI_EVENT_PLUGIN_INTERNALS__ || { unregisterListener: function() {} };
+      window.__TAURI__ = window.__TAURI__ || { core: { invoke: window.__TAURI_INTERNALS__.invoke } };
+    </script>
+    <link href="/_app/immutable/entry/start.CdoM_6Cq.js" rel="modulepreload">
+    <link href="/_app/immutable/chunks/tyfMVCTE.js" rel="modulepreload">
+    <link href="/_app/immutable/chunks/B56Y_4V0.js" rel="modulepreload">
+    <link href="/_app/immutable/chunks/0sAM_e2-.js" rel="modulepreload">
+    <link href="/_app/immutable/entry/app.D4iTJd1B.js" rel="modulepreload">
+    <link href="/_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+    <link href="/_app/immutable/assets/sonner.DZTCGkOb.css" rel="stylesheet">
+    <link href="/_app/immutable/assets/0.CCfNwF8g.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover" style="background-color: #0D0D0D;">
+    <div id="svelte-root" style="display: contents; user-select: none;"></div>
+    <script type="module">
+      globalThis.__sveltekit_fr327y = { base: "" };
+      import { start } from "/_app/immutable/entry/start.CdoM_6Cq.js";
+      import * as app from "/_app/immutable/entry/app.D4iTJd1B.js";
+      const target = document.getElementById('svelte-root');
+      start(app, target);
+    </script>
+  </body>
+</html>
