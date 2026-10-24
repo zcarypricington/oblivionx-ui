@@ -113,10 +113,23 @@ if (cmd === 'get_roblox_clients') return resolve([{ pid: 1234, exe: 'RobloxPlaye
     </div>
     <script type="module">
       globalThis.__sveltekit_fr327y = { base: "" };
+      
+      // Ensure proper data types for Svelte component hydration on Vercel
+      // Prevent TypeError: t.trim is not a function and t(...).map is not a function
+      // by initializing component data with correct types
+      const SvelteInit = {
+        base: "",
+        loading: true,
+        error: null,
+        data: {}
+      };
+      
       import { start } from "/_app/immutable/entry/start.CdoM_6Cq.js";
       import * as app from "/_app/immutable/entry/app.D4iTJd1B.js";
       const target = document.getElementById('svelte-root');
-      start(app, target);
+      
+      // Start Svelte with initialized data to prevent hydration errors
+      start(app, target, SvelteInit);
     </script>
     <script>
       (function() {
