@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" style="background-color: #0d0d0d !important; color-scheme: dark;">
   <head>
     <meta charset="utf-8" />
@@ -113,6 +113,12 @@ if (cmd === 'get_roblox_clients') return resolve([{ pid: 1234, exe: 'RobloxPlaye
     </div>
     <script type="module">
       globalThis.__sveltekit_fr327y = { base: "" };
+      
+      // Override API endpoint for production - change from oblivionx to real
+      // This fixes ERR_NAME_NOT_RESOLVED errors for api.oblivionx.invalid
+      // Uncomment the line below if using api.real.invalid backend:
+      // window.__API_ENDPOINT = 'https://api.real.invalid';
+      
       import { start } from "/_app/immutable/entry/start.CdoM_6Cq.js";
       import * as app from "/_app/immutable/entry/app.D4iTJd1B.js";
       const target = document.getElementById('svelte-root');
@@ -199,3 +205,4 @@ if (cmd === 'get_roblox_clients') return resolve([{ pid: 1234, exe: 'RobloxPlaye
     </script>
   </body>
 </html>
+
